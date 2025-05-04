@@ -520,6 +520,74 @@ class CustomPaliGemmaModelWrapper(nn.Module):
                 **kwargs
             )
         return outputs
+        
+    def generate(self, input_ids, attention_mask, external_features=None, **kwargs):
+        """
+        Custom generate method that properly handles visual features.
+        """
+        if external_features is not None:
+            # 1. First we call the original generate method of the model but only for the first step
+            # this ensures our model works with the initial tokens
+            
+            # Process visual features
+            projected_features = self.vision_projection(external_features.to(device))
+            
+            # Now we directly call the forward method to generate the first token
+            # This will properly process the visual features
+            batch_size = input_ids.shape[0]
+            
+            # Create initial model output with enough tokens
+            # for PaliGemma to use in the decoding phase
+            with torch.no_grad():
+                forward_outputs = self.forward(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    external_features=external_features,
+                )
+                
+                # Predict the next token from logits
+                next_token_logits = forward_outputs.logits[:, -1, :]
+                
+                # Simple greedy decoding, more sophisticated strategies can also be used
+                if "num_beams" in kwargs and kwargs["num_beams"] > 1:
+                    # Initialize for beam search
+                    probs = torch.nn.functional.softmax(next_token_logits, dim=-1)
+                    _, next_tokens = torch.topk(probs, kwargs.get("num_beams", 4), dim=1)
+                    
+                    # Select first beam token for simplicity
+                    next_token = next_tokens[:, 0].unsqueeze(-1)
+                else:
+                    # Greedy decoding
+                    next_token = torch.argmax(next_token_logits, dim=-1).unsqueeze(-1)
+                
+                # Create the initial output sequence
+                output_ids = torch.cat([input_ids, next_token], dim=-1)
+                
+                # Now we can start normal generation from the second token
+                # We can use the model's normal generation process, since we've generated the first visual tokens
+                if "max_length" in kwargs:
+                    max_len = kwargs["max_length"]
+                else:
+                    max_len = 64  # Default value
+                
+                # First token has been generated, now we can continue with normal generate
+                # Compatible with the LoRA model
+                full_output = self.paligemma.generate(
+                    input_ids=output_ids,
+                    attention_mask=torch.cat([attention_mask, torch.ones(batch_size, 1).to(device)], dim=1),
+                    max_length=max_len,
+                    num_beams=kwargs.get("num_beams", 1),
+                    early_stopping=kwargs.get("early_stopping", False)
+                )
+                
+                return full_output
+        else:
+            # Standard generate call if no external features
+            return self.paligemma.generate(
+                input_ids=input_ids, 
+                attention_mask=attention_mask,
+                **kwargs
+            )
 
 # --- 6. Initialization ---
 print("Initializing components...")
@@ -639,11 +707,11 @@ def evaluate_model(model, dataloader, processor, device):
 
             # Generate predictions for a few samples (for qualitative evaluation)
             if step < 2:  # Only generate for first 2 batches to save time
-                # Generate captions
-                generated_ids = model.paligemma.generate(
+                # Generate captions using our custom wrapper's generate method
+                generated_ids = model.generate(
                     input_ids=input_ids[:, :1],  # Only use the first token (usually <image>)
                     attention_mask=attention_mask[:, :1],
-                    vision_hidden_states=external_features.unsqueeze(1),
+                    external_features=external_features,
                     max_length=GENERATE_MAX_LENGTH,
                     num_beams=NUM_BEAMS,
                     early_stopping=True
@@ -812,4 +880,4 @@ if USE_WANDB and WANDB_LOG_MODEL:
     # Finish the wandb run
     wandb.finish()
 
-print("Code execution finished conceptually.") 
+print("Code execution finished conceptually.")
