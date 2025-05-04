@@ -1,0 +1,49 @@
+# PaliGemma TSN Training Configuration
+
+# Model Configuration
+model:
+  paligemma_model_id: "google/paligemma-3b-mix-224"
+  feature_dim: 1024
+
+# Dataset Configuration
+dataset:
+  captions_path: "dataset/captions.csv"
+  risc_dataset_path: "dataset/resized"
+  max_train_samples: 1000  # Training time can be reduced by using fewer examples
+  max_val_samples: 100     # Validation time can be reduced by using fewer examples
+
+# Training Configuration
+training:
+  num_epochs: 3  # Reduced from 10 to 3 - to decrease training time
+  batch_size: 4  # Increased from 2 to 4 - to decrease training time
+  learning_rate: 1.0e-4  # Higher learning rate - to decrease training time
+  gradient_accumulation_steps: 2  # Reduced from 4 to 2 - to decrease training time
+  weight_decay: 0.01
+  warmup_steps: 50  # Reduced from 100 to 50 - to decrease training time
+
+# LoRA Configuration
+lora:
+  r: 8  # Reduced from 16 to 8 - to decrease training time
+  lora_alpha: 16  # Reduced from 32 to 16 - to decrease training time
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "v_proj"]  # Training can be accelerated by targeting fewer modules
+
+# Output Configuration
+output:
+  output_dir: "paligemma_finetuned_tsn"
+  save_every_n_epochs: 1
+
+# Evaluation Configuration
+evaluation:
+  eval_during_training: true
+  generate_max_length: 128
+  num_beams: 4
+
+# Weights & Biases Configuration
+wandb:
+  use_wandb: true
+  project: "2697134-tsn-paligemma-project"
+  name: "paligemma-tsn-training"
+  tags: ["paligemma", "tsn", "risc", "remote-sensing"]
+  log_model: true
+  log_freq: 10  # Log every 10 steps
