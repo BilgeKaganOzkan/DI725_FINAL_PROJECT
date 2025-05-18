@@ -1,102 +1,414 @@
-# RISC Dataset Analysis Report
+# PaliGemma TSN-QLoRA for Remote Sensing Image Captioning
 
-## 1. Introduction
+This project implements an advanced remote sensing image captioning system by enhancing Google's PaliGemma model with Temporal Segment Network (TSN) architecture and Quantized Low-Rank Adaptation (QLoRA) fine-tuning on the RISC dataset.
 
-This report presents a comprehensive analysis of the RISC (Remote Sensing Image Captioning) dataset, which consists of remote sensing images and their corresponding captions. The analysis explores the dataset structure, image properties, caption characteristics, and content categories to provide insights for the image captioning task using the PaliGemma model.
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Installation](#installation)
+- [Dataset](#dataset)
+- [Project Structure](#project-structure)
+- [Usage](#usage)
+  - [Training](#training)
+  - [Hyperparameter Optimization](#hyperparameter-optimization)
+  - [Inference](#inference)
+- [Model Architecture](#model-architecture)
+- [Configuration](#configuration)
+- [Troubleshooting](#troubleshooting)
+- [Results](#results)
 
-## 2. Dataset Structure
+## Project Overview
 
-The RISC dataset contains **44,521 unique images** with a total of **222,605 captions** (5 captions per image). The dataset is divided into three splits:
+This project combines several state-of-the-art techniques to improve image captioning for remote sensing imagery:
 
+- **PaliGemma**: A powerful vision-language model from Google that serves as the foundation
+- **TSN (Temporal Segment Network)**: Adapted for spatial segmentation at multiple scales (1×1 and 2×2)
+- **QLoRA (Quantized Low-Rank Adaptation)**: For memory-efficient fine-tuning with 4-bit quantization
+- **Multiple Integration Methods**: Different approaches to combine TSN with PaliGemma
+- **Attention Mechanisms**: For improved feature fusion across spatial segments
+
+The goal is to enhance remote sensing image captioning performance by leveraging spatial segmentation and attention mechanisms while maintaining computational efficiency through quantization and low-rank adaptation techniques.
+
+## Features
+
+- Fine-tuning of PaliGemma model using QLoRA for memory efficiency
+- Multiple TSN integration methods (vision tower replacement, enhanced encoder, adapter, direct output)
+- Spatial segmentation at different scales to capture both global and local features
+- Attention mechanisms for improved feature fusion
+- Comprehensive experiment tracking with Weights & Biases
+- Inference script for generating captions on new images
+- Hyperparameter optimization capabilities
+
+## Installation
+
+### Prerequisites
+
+- Python 3.8+
+- CUDA-compatible GPU (recommended)
+- Hugging Face account with access to PaliGemma model
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/paligemma-tsn-qlora.git
+cd paligemma-tsn-qlora
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Login to Hugging Face (required for PaliGemma access):
+```bash
+huggingface-cli login
+```
+
+4. Login to Weights & Biases for experiment tracking:
+```bash
+wandb login
+```
+
+## Dataset
+
+The project uses the RISC (Remote Sensing Image Captioning) dataset, which contains remote sensing images with multiple captions per image.
+
+### Dataset Structure
+- `dataset/`: Contains the original RISC dataset
+- `processed_dataset/`: Contains preprocessed CSV files with image paths and captions
+  - `train.csv`: Training dataset
+  - `val.csv`: Validation dataset
+  - `test.csv`: Test dataset
+
+### Dataset Statistics
+- **Total Images**: 44,521 unique images with 222,605 captions (5 captions per image)
 - **Train**: 35,614 images (79.99%)
 - **Validation**: 4,453 images (10.00%)
 - **Test**: 4,454 images (10.00%)
 
-The images come from three different sources:
-
+### Image Sources
 - **NWPU**: 31,500 images (70.75%)
 - **RSICD**: 10,921 images (24.53%)
 - **UCM**: 2,100 images (4.72%)
 
-Each source is proportionally distributed across the train, validation, and test splits, ensuring a balanced representation in each split.
+### Image Properties
+- Fixed resolution: 224×224 pixels
+- Average file size: 24.75 KB
 
-## 3. Image Properties
+### Caption Analysis
+- Average caption length: 12.09 words
+- Most frequent words: "there", "some", "many", "green", "trees", "buildings"
 
-All images in the dataset have a fixed resolution of **224×224 pixels**, making them suitable for direct input into most vision models without resizing. The analysis of a sample of 1,000 images revealed:
+### Content Categories
+- **Vegetation**: 44.10% (trees, forest, grass)
+- **Urban**: 31.50% (buildings, city, residential areas)
+- **Landscape**: 22.56% (mountains, hills, fields)
+- **Transportation**: 20.78% (roads, highways, vehicles)
+- **Water**: 18.92% (rivers, lakes, oceans)
+- **Infrastructure**: 10.24% (bridges, ports, facilities)
+- **Airport**: 5.76% (airports or related elements)
 
-- **Average file size**: 24.75 KB
-- **Minimum file size**: 9.00 KB
-- **Maximum file size**: 41.40 KB
+## Project Structure
 
-The consistent image size and resolution simplify the preprocessing pipeline for the image captioning task.
+```
+├── config/
+│   ├── config.yaml                  # Main configuration file
+│   └── optimization_configs.yaml    # Hyperparameter optimization config
+├── models/
+│   ├── tsn_paligemma_adapter.py     # TSN-PaliGemma adapter integration
+│   ├── tsn_paligemma_direct.py      # TSN-PaliGemma direct output manipulation
+│   ├── tsn_paligemma_enhanced.py    # TSN-PaliGemma enhanced encoder integration
+│   └── tsn_paligemma_model.py       # TSN-PaliGemma vision tower replacement
+├── processed_dataset/
+│   ├── train.csv                    # Training data
+│   ├── val.csv                      # Validation data
+│   └── test.csv                     # Test data
+├── dataset/                         # Original RISC dataset
+│   └── resized/                     # Resized images (224x224)
+├── dataset_exploration/
+│   └── explore_dataset.py           # Dataset analysis script
+├── dataset_preprocessing.py         # Dataset preprocessing script
+├── train_paligemma_qlora_tsn.py     # Main training script
+├── inference.py                     # Inference script
+└── README.md                        # This file
+```
 
-## 4. Caption Analysis
+## Usage
 
-### 4.1 Caption Length
+### Data Preprocessing
 
-The dataset contains a total of 222,605 captions with varying lengths:
+Before training, preprocess the RISC dataset:
 
-- **Average caption length**: 12.09 words
-- **Minimum caption length**: 5 words
-- **Maximum caption length**: 51 words
+```bash
+python dataset_preprocessing.py
+```
 
-The caption length distribution shows that most captions are concise, with the majority falling between 8 and 15 words.
+This script:
+1. Reads the original captions.csv file
+2. Selects one random caption per image
+3. Creates train, validation, and test splits
+4. Saves the processed data to CSV files in the processed_dataset directory
 
-### 4.2 Vocabulary and Common Words
+### Training
 
-The most frequent words in the captions are:
+To train the model:
 
-1. "there" (73,835 occurrences)
-2. "some" (62,069 occurrences)
-3. "many" (61,772 occurrences)
-4. "green" (61,307 occurrences)
-5. "trees" (51,464 occurrences)
-6. "buildings" (47,143 occurrences)
-7. "next" (24,639 occurrences)
-8. "area" (24,355 occurrences)
-9. "two" (18,839 occurrences)
-10. "beside" (17,950 occurrences)
+```bash
+python train_paligemma_qlora_tsn.py
+```
 
-The prevalence of words like "trees," "green," and "buildings" reflects the common elements in remote sensing imagery, such as vegetation and urban structures.
+This will train the model using the configuration in `config/config.yaml`. The training process includes:
 
-### 4.3 Caption Similarity
+1. Loading the PaliGemma model with QLoRA adaptation
+2. Integrating the TSN architecture based on the method specified in the config
+3. Training on the RISC dataset with the specified hyperparameters
+4. Validating after each epoch with sample image captioning
+5. Tracking metrics with Weights & Biases
 
-The average Jaccard similarity between captions for the same image is **0.3458**, indicating a moderate level of diversity among the five captions for each image. This suggests that the captions provide different perspectives or focus on different aspects of the same image, which can be beneficial for training a robust image captioning model.
+### Hyperparameter Optimization
 
-## 5. Content Categories
+To run hyperparameter optimization:
 
-The analysis of caption content revealed several dominant categories in the dataset:
+```bash
+python hyperparameter_optimization.py --config config/optimization_configs.yaml
+```
 
-- **Vegetation**: 44.10% of captions mention vegetation-related elements (trees, forest, grass)
-- **Urban**: 31.50% of captions describe urban structures (buildings, city, residential areas)
-- **Landscape**: 22.56% of captions refer to landscape features (mountains, hills, fields)
-- **Transportation**: 20.78% of captions mention transportation elements (roads, highways, vehicles)
-- **Water**: 18.92% of captions include water bodies (rivers, lakes, oceans)
-- **Infrastructure**: 10.24% of captions describe infrastructure (bridges, ports, facilities)
-- **Airport**: 5.76% of captions specifically mention airports or related elements
+Parameters:
+- `--config`: Path to optimization configuration file (default: "config/optimization_configs.yaml")
 
-Notably, **48.58%** of captions contain multiple categories, indicating the complex and diverse nature of remote sensing imagery. The co-occurrence analysis shows that vegetation often appears alongside urban elements and landscape features, reflecting the mixed land use patterns captured in remote sensing images.
+The optimization parameters are defined in the YAML configuration file:
 
-## 6. Implications for Image Captioning
+```yaml
+method: bayes  # Optimization method: bayes, random, or grid
+parameters:
+  learning_rate:
+    values: [1e-6, 5e-6, 1e-5, 5e-5]
+  batch_size:
+    values: [2, 4, 8]
+  tsn:
+    backbone:
+      values: ["resnet18", "inception_v3"]
+    original_ratio:
+      values: [0.3, 0.5, 0.7]
+    tsn_ratio:
+      values: [0.3, 0.5, 0.7]
+  # ... other parameters
+optimization:
+  max_train_samples: 100  # Use subset for faster optimization
+  max_val_samples: 20
+  num_runs: 10
+```
 
-Based on the dataset analysis, several considerations emerge for the image captioning task using the PaliGemma model:
+The optimization process:
+1. Backs up the original `config.yaml`
+2. Runs multiple training iterations with different hyperparameters
+3. Tracks performance using Weights & Biases
+4. Saves the best configuration to `best_config.yaml`
+5. Restores the original configuration
 
-1. **Balanced Data Distribution**: The balanced distribution across train, validation, and test splits provides a solid foundation for model training and evaluation.
+After optimization, train with the best configuration:
+```bash
+copy config\best_config.yaml config\config.yaml
+python train_paligemma_qlora_tsn.py
+```
 
-2. **Consistent Image Format**: The uniform image resolution simplifies the preprocessing pipeline and allows for direct integration with the PaliGemma model.
+### Inference
 
-3. **Caption Diversity**: The moderate similarity between captions for the same image suggests that the model should be trained to capture different aspects and perspectives of the same scene.
+To generate captions for new images, use the provided inference script:
 
-4. **Domain-Specific Vocabulary**: The prevalence of certain words and categories indicates the importance of domain-specific knowledge in remote sensing image captioning. Fine-tuning PaliGemma on this vocabulary will be crucial.
+```bash
+python inference.py --image_path path/to/image.jpg --model_path path/to/saved/model
+```
 
-5. **Multi-Category Content**: The high percentage of captions with multiple categories suggests that the model should be capable of describing complex scenes with diverse elements.
+Parameters:
+- `--image_path`: Path to the image file (required)
+- `--model_path`: Path to the saved model directory (required)
+- `--config_path`: Path to the configuration file (default: "config/config.yaml")
+- `--integration_method`: TSN integration method (default: from config file)
 
-6. **Contextual Relationships**: The co-occurrence of different categories (e.g., vegetation with urban elements) highlights the importance of capturing contextual relationships in the generated captions.
+The inference script:
+1. Loads the saved model and configuration
+2. Processes the input image
+3. Generates a caption using the same parameters as during training
+4. Displays the image and the generated caption
 
-## 7. Conclusion
+Example usage:
+```bash
+python inference.py --image_path dataset/resized/sample.jpg --model_path paligemma_tsn_qlora/checkpoint-1000
+```
 
-The RISC dataset provides a rich and diverse collection of remote sensing images and captions, making it suitable for training and evaluating image captioning models. The dataset's balanced structure, consistent image format, and varied caption content offer a solid foundation for fine-tuning the PaliGemma model for the remote sensing domain.
+## Model Architecture
 
-The analysis reveals the complex nature of remote sensing imagery, with multiple categories often present in a single image. This complexity presents both challenges and opportunities for the image captioning task, requiring the model to understand and describe diverse elements and their relationships within the scene.
+The model architecture combines PaliGemma with TSN and QLoRA:
 
-Future work should focus on leveraging these insights to develop effective fine-tuning strategies for the PaliGemma model, with particular attention to domain-specific vocabulary, contextual relationships, and the ability to capture multiple aspects of the same scene.
+1. **TSN Module**:
+   - Takes an image and divides it into segments at different scales (1×1, 2×2)
+   - Processes each segment through a backbone network (ResNet18 or InceptionV3)
+   - Applies attention mechanisms to fuse features
+   - Projects features to match PaliGemma's visual embedding space
+
+2. **PaliGemma Model**:
+   - A vision-language model from Google based on the T5 architecture
+   - Takes visual embeddings and generates text
+   - Pretrained on a mix of image-text pairs
+
+3. **QLoRA Adaptation**:
+   - Applies Quantized Low-Rank Adaptation to specific layers of PaliGemma
+   - Enables efficient fine-tuning with fewer parameters
+   - Uses 4-bit quantization to reduce memory requirements
+
+4. **Integration Methods**:
+   - **Vision Tower Replacement**: Replaces PaliGemma's vision encoder with TSN
+   - **Enhanced Encoder Integration**: Combines TSN features with PaliGemma's encoder output
+   - **Adapter Integration**: Uses TSN as an adapter between vision and language components
+   - **Direct Output**: Uses PaliGemma's output directly without any modifications
+
+## Configuration
+
+All model and training parameters are defined in `config/config.yaml`:
+
+### Model Configuration
+```yaml
+model:
+  model_id: "google/paligemma-3b-mix-224"
+```
+
+### Data Configuration
+```yaml
+data:
+  train_csv: "processed_dataset/train.csv"
+  val_csv: "processed_dataset/val.csv"
+  test_csv: "processed_dataset/test.csv"
+  dataset_path: "dataset/resized"
+  max_train_samples: 0  # 0 means use all samples
+  max_val_samples: 0
+```
+
+### Evaluation Configuration
+```yaml
+evaluation:
+  eval_during_training: true
+  generate_max_length: 128
+  min_length: 20
+  num_beams: 4
+```
+
+### Training Configuration
+```yaml
+training:
+  batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 1.0e-06
+  mixed_precision: true
+  num_epochs: 30
+  weight_decay: 0.05
+  label_smoothing: 0.1
+  use_wandb: true
+```
+
+### QLoRA Configuration
+```yaml
+lora:
+  r: 32
+  lora_alpha: 64
+  lora_dropout: 0.1
+  target_modules:
+  - q_proj
+  - v_proj
+  - k_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+```
+
+### Prompt Configuration
+```yaml
+prompt:
+  input_prompt: "Describe all the objects and features visible in this remote sensing image:"
+```
+
+### TSN Configuration
+```yaml
+tsn:
+  backbone: "resnet18"
+  feature_dim: 512
+  pretrained: true
+  projection_dim: 1408
+  segment_scales:
+  - [1, 1]  # Macro scale (whole image)
+  - [2, 2]  # Medium scale (2x2 grid)
+  use_attention: true
+  integration_method: "enhanced"
+  original_ratio: 0.5  # Mixing ratio for original features
+  tsn_ratio: 0.5       # Mixing ratio for TSN features
+  gen_original_ratio: 0.6  # Ratio for generation
+  gen_tsn_ratio: 0.4       # Ratio for generation
+```
+
+## Troubleshooting
+
+### Model Output Issues
+If you want to see the raw model outputs without any filtering:
+1. Use the "direct" integration method in `config.yaml` (`integration_method: "direct"`)
+2. This will ensure you get the exact output from the model without any modifications
+3. Use a specific prompt that clearly indicates the remote sensing context
+4. Ensure the model has been trained for enough epochs
+
+### Short Output Issues
+If the model generates very short outputs:
+1. Increase the `min_length` parameter in the evaluation section of `config.yaml`
+2. Increase the `generate_max_length` parameter for longer outputs
+3. Use a prompt that explicitly asks for detailed descriptions
+4. Check if the training captions are sufficiently detailed
+
+### Memory Issues
+If you encounter memory issues:
+1. Reduce batch size in `config/config.yaml`
+2. Increase gradient accumulation steps
+3. Use mixed precision training (already enabled by default)
+4. Reduce the TSN segment scales (e.g., use only 1×1)
+5. Use a smaller backbone network (e.g., ResNet18 instead of InceptionV3)
+
+### PaliGemma Access
+If you have issues accessing the PaliGemma model:
+1. Ensure you've requested access on Hugging Face
+2. Login to Hugging Face: `huggingface-cli login`
+3. Check your internet connection
+4. Try using a VPN if you're in a region with restricted access
+
+## Results
+
+The model performance is tracked using Weights & Biases. You can view the results at:
+```
+https://wandb.ai/[YOUR_USERNAME]/paligemma-tsn-qlora
+```
+
+### Performance Metrics
+The model is evaluated using standard image captioning metrics:
+- **Training Loss**: Measures the model's performance during training
+- **Validation Loss**: Measures the model's generalization to unseen data
+- **BLEU Score**: Measures n-gram overlap between generated and reference captions
+- **METEOR Score**: Evaluates semantic similarity and grammatical structure
+- **CIDEr Score**: Measures consensus between generated and reference captions
+- **ROUGE-L Score**: Measures longest common subsequence between generated and reference captions
+
+### Ablation Studies
+Different configurations were tested to evaluate the impact of:
+- **Backbone Architecture**: ResNet18 vs. InceptionV3
+- **Spatial Segmentation Scales**: Different combinations of 1×1 and 2×2 scales
+- **Integration Methods**: Vision Tower Replacement vs. Enhanced Encoder Integration vs. Adapter vs. Direct Output Manipulation
+- **Mixing Ratios**: Different combinations of original and TSN feature ratios
+- **Prompt Formats**: Different prompts for generating captions
+
+### Key Findings
+- The TSN architecture with spatial segmentation significantly improves captioning performance compared to the base PaliGemma model
+- The Enhanced Encoder Integration method provides the best results among all integration approaches
+- Attention mechanisms help the model focus on relevant image regions
+- A balanced mixing ratio (0.5:0.5) between original and TSN features works best during training
+- A slightly higher original ratio (0.6:0.4) during generation helps avoid safety filter responses
+- Using detailed prompts like "Describe all the objects and features visible in this remote sensing image:" produces more comprehensive captions
+- QLoRA fine-tuning with r=32 and alpha=64 offers a good balance between performance and efficiency
+
+### Sample Results
+The model generates detailed and accurate captions for remote sensing images, capturing both the main objects and their spatial relationships. It performs particularly well on complex scenes with multiple elements, such as urban areas with buildings, roads, and vegetation.

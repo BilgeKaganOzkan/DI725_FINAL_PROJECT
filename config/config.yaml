@@ -1,49 +1,73 @@
-# PaliGemma TSN Training Configuration
-
-# Model Configuration
 model:
-  paligemma_model_id: "google/paligemma-3b-mix-224"
-  feature_dim: 1024
-
-# Dataset Configuration
-dataset:
-  captions_path: "dataset/captions.csv"
-  risc_dataset_path: "dataset/resized"
-  max_train_samples: 1000  # Training time can be reduced by using fewer examples
-  max_val_samples: 100     # Validation time can be reduced by using fewer examples
-
-# Training Configuration
-training:
-  num_epochs: 3  # Reduced from 10 to 3 - to decrease training time
-  batch_size: 4  # Increased from 2 to 4 - to decrease training time
-  learning_rate: 1.0e-4  # Higher learning rate - to decrease training time
-  gradient_accumulation_steps: 2  # Reduced from 4 to 2 - to decrease training time
-  weight_decay: 0.01
-  warmup_steps: 50  # Reduced from 100 to 50 - to decrease training time
-
-# LoRA Configuration
-lora:
-  r: 8  # Reduced from 16 to 8 - to decrease training time
-  lora_alpha: 16  # Reduced from 32 to 16 - to decrease training time
-  lora_dropout: 0.05
-  target_modules: ["q_proj", "v_proj"]  # Training can be accelerated by targeting fewer modules
-
-# Output Configuration
-output:
-  output_dir: "paligemma_finetuned_tsn"
-  save_every_n_epochs: 1
-
-# Evaluation Configuration
+  model_id: google/paligemma-3b-mix-224
+data:
+  train_csv: processed_dataset/train.csv
+  val_csv: processed_dataset/val.csv
+  test_csv: processed_dataset/test.csv
+  dataset_path: dataset/resized
+  max_train_samples: 0
+  max_val_samples: 0
 evaluation:
   eval_during_training: true
   generate_max_length: 128
+  min_length: 20
   num_beams: 4
-
-# Weights & Biases Configuration
-wandb:
+lora:
+  r: 8
+  lora_alpha: 64
+  lora_dropout: 0.1
+  target_modules:
+  - q_proj
+  - v_proj
+  - k_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+output:
+  output_dir: paligemma_tsn_qlora
+prompt:
+  # Available prompt options:
+  # 'Caption this image:'
+  # 'Describe this image in detail:'
+  # 'What can you see in this remote sensing image?'
+  # 'Provide a detailed description of this aerial/satellite image:'
+  # 'Describe all the objects and features visible in this remote sensing image:'
+  # 'What do you see in this aerial photograph?'
+  input_prompt: 'Describe all the objects and features visible in this remote sensing image:'
+training:
+  batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 1.0e-06
+  mixed_precision: true
+  num_epochs: 30
+  weight_decay: 0.05
+  label_smoothing: 0.1
   use_wandb: true
-  project: "2697134-tsn-paligemma-project"
-  name: "paligemma-tsn-training"
-  tags: ["paligemma", "tsn", "risc", "remote-sensing"]
-  log_model: true
-  log_freq: 10  # Log every 10 steps
+
+wandb:
+  run_name: tsn-inception_v3-lora-r8
+  project: 2697134-tsn-paligemma-project
+  log_val_loss: true
+tsn:
+  # Backbone options: resnet18, resnet50, resnet101, resnet152, inception_v3, efficientnet_b0, efficientnet_b3
+  backbone: inception_v3
+  feature_dim: 2048
+  pretrained: true
+  projection_dim: 1408
+  segment_scales:
+  - - 1
+    - 1
+  - - 2
+    - 2
+  use_attention: true
+  # TSN integration method: 'replace', 'combine', 'adapter', 'direct', or 'enhanced'
+  integration_method: enhanced
+  # Mixing ratios for combining original vision tower output with TSN features
+  # Higher values for original_ratio reduce the risk of triggering safety mechanisms
+  # For forward pass (training)
+  original_ratio: 0.5
+  tsn_ratio: 0.5
+  # For generate (inference)
+  gen_original_ratio: 0.6
+  gen_tsn_ratio: 0.4

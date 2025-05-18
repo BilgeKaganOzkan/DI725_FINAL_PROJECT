@@ -1,7 +1,0 @@
-pandas
-matplotlib
-numpy
-Pillow
-nltk
-seaborn
-wordcloud

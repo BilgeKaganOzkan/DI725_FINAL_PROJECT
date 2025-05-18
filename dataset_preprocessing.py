@@ -40,8 +40,8 @@ for _, row in tqdm(captions_df.iterrows(), total=len(captions_df)):
     source = row['source']
     split = row['split']
 
-    # Create full absolute image path to ensure it works from anywhere
-    image_path = os.path.abspath(os.path.join(IMAGES_PATH, image_name))
+    # Use relative path, don't create static absolute paths
+    image_path = os.path.join(IMAGES_PATH, image_name)
 
     # Collect all valid captions for this image
     valid_captions = []
