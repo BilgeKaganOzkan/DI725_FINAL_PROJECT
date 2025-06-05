@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# Core PyTorch and system imports
 import os
 import torch
 import yaml
@@ -9,7 +10,11 @@ import random
 from PIL import Image
 import wandb
 import warnings
+
+# PyTorch utilities for data handling
 from torch.utils.data import Dataset
+
+# HuggingFace transformers for model training
 from transformers import (
     PaliGemmaForConditionalGeneration,
     PaliGemmaProcessor,
@@ -18,34 +23,75 @@ from transformers import (
     TrainingArguments,
     TrainerCallback
 )
+
+# PEFT (Parameter-Efficient Fine-Tuning) for LoRA
 from peft import LoraConfig, get_peft_model
+
+# Custom TSN integration module
 from models.tsn_paligemma_model import create_tsn_paligemma_model
 
+# Suppress warnings for cleaner output
 warnings.filterwarnings("ignore")
 
 class ValidationLossCallback(TrainerCallback):
+    """
+    Custom callback to periodically evaluate model performance on validation set.
+    
+    This callback:
+    - Runs validation at specific training steps
+    - Calculates average validation loss
+    - Logs results to WandB if enabled
+    - Uses a subset of validation data for efficiency
+    """
 
     def __init__(self, val_dataset, processor, device, use_wandb=False):
+        """
+        Initialize validation callback.
+        
+        Args:
+            val_dataset: Validation dataset for evaluation
+            processor: PaliGemma processor for text/image handling
+            device: GPU/CPU device for computation
+            use_wandb (bool): Whether to log to Weights & Biases
+        """
         self.val_dataset = val_dataset
         self.processor = processor
         self.device = device
         self.use_wandb = use_wandb
+        # Define specific steps for validation (strategic intervals)
         self.validation_steps = [200, 400, 600, 800, 1000, 1200, 1400]
 
     def on_step_end(self, args, state, control, model=None, **kwargs):
+        """
+        Called at the end of each training step.
+        Performs validation if current step matches validation schedule.
+        
+        Args:
+            args: Training arguments
+            state: Current training state
+            control: Training control flags
+            model: Current model being trained
+        """
+        # Check if current step requires validation
         if state.global_step in self.validation_steps and self.val_dataset is not None:
-            model.eval()
+            model.eval()  # Set model to evaluation mode
             total_loss = 0.0
-            num_samples = min(100, len(self.val_dataset))
+            num_samples = min(100, len(self.val_dataset))  # Limit samples for efficiency
 
+            # Disable gradient computation for validation
             with torch.no_grad():
+                # Process subset of validation samples
                 for i in range(num_samples):
                     try:
+                        # Get validation sample
                         sample = self.val_dataset[i]
                         image = sample['image']
                         caption = sample['caption']
 
+                        # Prepare input text with standard PaliGemma format
                         text = "<image> <bos> describe this image.}"
+                        
+                        # Try suffix-based processing first
                         try:
                             inputs = self.processor(
                                 text=[text],
@@ -55,6 +101,7 @@ class ValidationLossCallback(TrainerCallback):
                                 padding="longest"
                             ).to(self.device)
                         except (AttributeError, TypeError):
+                            # Fallback to manual text construction
                             full_text = text + caption
                             inputs = self.processor(
                                 text=[full_text],
@@ -62,19 +109,24 @@ class ValidationLossCallback(TrainerCallback):
                                 return_tensors="pt",
                                 padding="longest"
                             ).to(self.device)
+                            # Set labels for loss calculation
                             inputs["labels"] = inputs["input_ids"].clone()
 
+                        # Forward pass with mixed precision
                         with torch.amp.autocast('cuda', dtype=torch.bfloat16):
                             outputs = model(**inputs)
                             loss = outputs.loss
                             total_loss += loss.item()
 
                     except Exception:
+                        # Skip problematic samples
                         continue
 
+            # Calculate and log average validation loss
             if num_samples > 0:
                 avg_val_loss = total_loss / num_samples
 
+                # Log to WandB if enabled
                 if self.use_wandb:
                     import wandb
                     if wandb.run is not None:
@@ -87,19 +139,48 @@ class ValidationLossCallback(TrainerCallback):
                         except Exception:
                             pass
 
-            model.train()
+            model.train()  # Return model to training mode
 
 class BestModelCallback(TrainerCallback):
+    """
+    Callback to automatically save the best performing model during training.
+    
+    This callback:
+    - Monitors training loss continuously
+    - Saves model when loss improves
+    - Handles TSN wrapper extraction for proper saving
+    - Verifies essential files are saved correctly
+    """
 
     def __init__(self, output_dir, processor, use_wandb=False):
+        """
+        Initialize best model callback.
+        
+        Args:
+            output_dir (str): Directory to save best model
+            processor: PaliGemma processor to save
+            use_wandb (bool): Whether to log to WandB
+        """
         self.output_dir = output_dir
         self.processor = processor
         self.use_wandb = use_wandb
-        self.best_loss = float('inf')
+        self.best_loss = float('inf')  # Track best loss seen so far
         self.best_model_dir = os.path.join(output_dir, "best_model")
         os.makedirs(self.best_model_dir, exist_ok=True)
 
     def on_log(self, args, state, control, model=None, logs=None, **kwargs):
+        """
+        Called when training logs are updated.
+        Saves model if training loss has improved.
+        
+        Args:
+            args: Training arguments
+            state: Current training state
+            control: Training control flags
+            model: Current model being trained
+            logs: Dictionary of logged metrics
+        """
+        # Check if training loss is available and improved
         if logs and "train_loss" in logs:
             current_loss = logs["train_loss"]
 
@@ -108,28 +189,30 @@ class BestModelCallback(TrainerCallback):
                 print(f"\n[BEST] New best model! Loss: {current_loss:.4f} (Step: {state.global_step})")
 
                 try:
-                    # Save LoRA adapter for TSN-wrapped models
+                    # Determine which model to save (handle TSN wrapper)
                     model_to_save = model
 
-                    # Handle TSN wrapper
+                    # Extract PaliGemma model from TSN wrapper if present
                     if hasattr(model, 'paligemma'):
                         model_to_save = model.paligemma
                         print("[CONFIG] Detected TSN wrapper, extracting PaliGemma model")
                     elif hasattr(model, 'module') and hasattr(model.module, 'paligemma'):
+                        # Handle DataParallel case
                         model_to_save = model.module.paligemma
                         print("[CONFIG] Detected TSN wrapper in module, extracting PaliGemma model")
                     else:
                         print("[WARNING] No TSN wrapper detected, using model directly")
 
-                    # Save model and processor
+                    # Save LoRA adapter model
                     print(f"[SAVING] Saving model to: {self.best_model_dir}")
                     model_to_save.save_pretrained(self.best_model_dir, safe_serialization=False)
                     print(f"[SUCCESS] Best model saved to: {self.best_model_dir}")
 
+                    # Save processor (handles tokenization and image preprocessing)
                     self.processor.save_pretrained(self.best_model_dir)
                     print(f"[SUCCESS] Processor saved to: {self.best_model_dir}")
 
-                    # Verify essential files
+                    # Verify essential LoRA files are present
                     essential_files = ["adapter_config.json", "adapter_model.bin"]
                     for file in essential_files:
                         if os.path.exists(os.path.join(self.best_model_dir, file)):
@@ -137,6 +220,7 @@ class BestModelCallback(TrainerCallback):
                         else:
                             print(f"[ERROR] Missing: {file}")
 
+                    # Log to WandB if enabled
                     if self.use_wandb:
                         import wandb
                         if wandb.run is not None:
@@ -155,24 +239,55 @@ class BestModelCallback(TrainerCallback):
                     traceback.print_exc()
 
 class SamplingCallback(TrainerCallback):
+    """
+    Callback for periodic caption generation during training.
+    
+    This callback:
+    - Generates sample captions every 200 steps
+    - Tracks mixing ratios for TSN models
+    - Monitors caption quality over time
+    - Creates sampling tables for analysis
+    """
 
     def __init__(self, processor, val_dataset, device, use_wandb=False):
+        """
+        Initialize sampling callback.
+        
+        Args:
+            processor: PaliGemma processor
+            val_dataset: Validation dataset for sampling
+            device: GPU/CPU device
+            use_wandb (bool): Whether to log to WandB
+        """
         self.processor = processor
         self.val_dataset = val_dataset
         self.device = device
         self.sample_count = 0
         self.use_wandb = use_wandb
-        self.sampling_data = []
+        self.sampling_data = []  # Store sampling results for analysis
 
     def on_step_end(self, args, state, control, model=None, **kwargs):
+        """
+        Called at end of each training step.
+        Updates TSN mixing ratios and generates sample captions periodically.
+        
+        Args:
+            args: Training arguments
+            state: Current training state
+            control: Training control flags
+            model: Current model being trained
+        """
+        # Update TSN mixing ratios based on training progress
         if hasattr(model, 'update_training_step'):
             model.update_training_step(state.global_step)
         elif hasattr(model, 'module') and hasattr(model.module, 'update_training_step'):
             model.module.update_training_step(state.global_step)
 
+        # Generate sample captions every 200 steps
         if state.global_step % 200 == 0 and state.global_step > 0:
             self.sample_count += 1
 
+            # Get current TSN mixing ratio if available
             if hasattr(model, 'get_current_mixing_ratios'):
                 _, tsn_ratio = model.get_current_mixing_ratios()
             elif hasattr(model, 'module') and hasattr(model.module, 'get_current_mixing_ratios'):
@@ -180,14 +295,17 @@ class SamplingCallback(TrainerCallback):
             else:
                 tsn_ratio = 0.0
 
+            # Generate sample caption
             model.eval()
             with torch.no_grad():
+                # Select random validation sample
                 sample_idx = random.randint(0, len(self.val_dataset) - 1)
                 sample = self.val_dataset[sample_idx]
                 image = sample['image']
                 ground_truth = sample['caption']
 
                 try:
+                    # Prepare input for caption generation
                     inputs = self.processor(
                         images=image,
                         text="<image>",
@@ -195,6 +313,7 @@ class SamplingCallback(TrainerCallback):
                         padding=False
                     ).to(self.device)
 
+                    # Generate caption with mixed precision
                     with torch.amp.autocast('cuda', dtype=torch.bfloat16):
                         outputs = model.generate(
                             **inputs,

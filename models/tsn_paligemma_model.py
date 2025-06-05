@@ -5,74 +5,166 @@ import torch.nn.functional as F
 from torchvision import models
 
 class VisionLanguageAttention(nn.Module):
-    """Enhanced attention for vision-language tasks"""
+    """
+    Enhanced attention mechanism specifically designed for vision-language tasks.
+    
+    This module implements:
+    - Channel attention: Focuses on semantic feature importance
+    - Spatial attention: Highlights geographic regions of interest
+    - Cross-scale fusion: Combines information with residual connections
+    
+    Particularly effective for remote sensing imagery where both semantic
+    content and spatial relationships are crucial for understanding.
+    """
+    
     def __init__(self, in_channels, reduction=16):
+        """
+        Initialize vision-language attention module.
+        
+        Args:
+            in_channels (int): Number of input feature channels
+            reduction (int): Channel reduction ratio for attention computation
+        """
         super(VisionLanguageAttention, self).__init__()
+        
         # Channel attention for semantic features
+        # Uses global average pooling + 2 conv layers to compute channel weights
         self.channel_attention = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(in_channels, in_channels // reduction, 1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(in_channels // reduction, in_channels, 1),
-            nn.Sigmoid()
+            nn.AdaptiveAvgPool2d(1),  # Global spatial pooling (H,W) -> (1,1)
+            nn.Conv2d(in_channels, in_channels // reduction, 1),  # Dimensionality reduction
+            nn.ReLU(inplace=True),  # Non-linear activation
+            nn.Conv2d(in_channels // reduction, in_channels, 1),  # Restore dimensions
+            nn.Sigmoid()  # Normalize to [0,1] range for weighting
         )
 
         # Spatial attention for fine-grained details
+        # Focuses on spatial locations that are most informative
         self.spatial_attention = nn.Sequential(
-            nn.Conv2d(2, 1, kernel_size=7, padding=3),
-            nn.Sigmoid()
+            nn.Conv2d(2, 1, kernel_size=7, padding=3),  # Combine mean and max pooled features
+            nn.Sigmoid()  # Normalize spatial weights
         )
 
-        # Cross-scale feature fusion
+        # Cross-scale feature fusion with learnable transformation
         self.fusion_conv = nn.Conv2d(in_channels, in_channels, 1)
 
     def forward(self, x):
-        # Channel attention
+        """
+        Forward pass of vision-language attention.
+        
+        Args:
+            x (torch.Tensor): Input feature tensor [B, C, H, W]
+            
+        Returns:
+            tuple: (enhanced_features, spatial_attention_map)
+                - enhanced_features: Attention-weighted features
+                - spatial_attention_map: Spatial attention weights for visualization
+        """
+        # Step 1: Channel attention - determine which features are important
         ca = self.channel_attention(x)
-        x_ca = x * ca
+        x_ca = x * ca  # Element-wise multiplication with channel weights
 
-        # Spatial attention
-        avg_out = torch.mean(x_ca, dim=1, keepdim=True)
-        max_out, _ = torch.max(x_ca, dim=1, keepdim=True)
-        sa_input = torch.cat([avg_out, max_out], dim=1)
-        sa = self.spatial_attention(sa_input)
-        x_sa = x_ca * sa
+        # Step 2: Spatial attention - determine where to focus spatially
+        avg_out = torch.mean(x_ca, dim=1, keepdim=True)  # Average across channels
+        max_out, _ = torch.max(x_ca, dim=1, keepdim=True)  # Max across channels
+        sa_input = torch.cat([avg_out, max_out], dim=1)  # Combine statistics
+        sa = self.spatial_attention(sa_input)  # Compute spatial weights
+        x_sa = x_ca * sa  # Apply spatial attention
 
-        # Feature fusion
-        enhanced = self.fusion_conv(x_sa)
-        output = x + enhanced  # Residual connection
+        # Step 3: Feature fusion with residual connection
+        enhanced = self.fusion_conv(x_sa)  # Learn optimal feature transformation
+        output = x + enhanced  # Residual connection preserves original information
 
         return output, sa
 
 class FeaturePyramidNetwork(nn.Module):
-    """Feature Pyramid Network for multi-scale feature fusion"""
+    """
+    Feature Pyramid Network (FPN) for multi-scale feature fusion.
+    
+    FPN enables the model to process information at multiple scales:
+    - High resolution features: Fine-grained spatial details
+    - Low resolution features: Global context and semantic information
+    
+    The network uses top-down pathway and lateral connections to
+    combine features from different scales effectively.
+    """
+    
     def __init__(self, in_channels, out_channels):
+        """
+        Initialize Feature Pyramid Network.
+        
+        Args:
+            in_channels (int): Input feature channels
+            out_channels (int): Output feature channels
+        """
         super(FeaturePyramidNetwork, self).__init__()
+        
+        # Lateral connections: reduce channel dimensions for each scale
         self.lateral_convs = nn.ModuleList([
             nn.Conv2d(in_channels, out_channels, 1) for _ in range(3)
         ])
+        
+        # Final convolutions: refine features after fusion
         self.fpn_convs = nn.ModuleList([
             nn.Conv2d(out_channels, out_channels, 3, padding=1) for _ in range(3)
         ])
 
     def forward(self, features):
-        # features: list of [P3, P4, P5] from different scales
+        """
+        Forward pass of Feature Pyramid Network.
+        
+        Args:
+            features (list): List of feature tensors [P3, P4, P5] from different scales
+            
+        Returns:
+            list: Fused multi-scale features
+        """
+        # Step 1: Apply lateral connections to standardize feature dimensions
         laterals = [conv(feat) for conv, feat in zip(self.lateral_convs, features)]
 
-        # Top-down pathway
+        # Step 2: Top-down pathway - propagate high-level context downwards
         for i in range(len(laterals) - 2, -1, -1):
+            # Upsample higher-level features and add to current level
             laterals[i] = laterals[i] + F.interpolate(
-                laterals[i + 1], size=laterals[i].shape[-2:], mode='bilinear', align_corners=False
+                laterals[i + 1], 
+                size=laterals[i].shape[-2:], 
+                mode='bilinear', 
+                align_corners=False
             )
 
-        # Final convolutions
+        # Step 3: Apply final convolutions to reduce aliasing and refine features
         outputs = [conv(lateral) for conv, lateral in zip(self.fpn_convs, laterals)]
         return outputs
 
 class TSNModule(nn.Module):
+    """
+    Temporal Spatial Networks (TSN) module adapted for static image analysis.
+    
+    This module processes images at multiple spatial scales and extracts
+    rich feature representations. Key components:
+    - Multi-scale segmentation: Analyzes image at different granularities
+    - Backbone CNN: Extracts deep features (ResNet, EfficientNet, etc.)
+    - Attention mechanisms: Focuses on important spatial and semantic features
+    - Feature Pyramid Network: Combines multi-scale information
+    - Projection layers: Maps features to match PaliGemma dimensions
+    """
+    
     def __init__(self, config):
+        """
+        Initialize TSN module with configuration.
+        
+        Args:
+            config (dict): Configuration dictionary containing:
+                - backbone: CNN backbone architecture name
+                - pretrained: Whether to use ImageNet pretrained weights
+                - segment_scales: List of segmentation scales [[1,1], [2,2], [3,3]]
+                - feature_dim: Feature dimension of backbone
+                - use_attention: Whether to apply attention mechanisms
+                - use_fpn: Whether to use Feature Pyramid Network
+                - projection_dim: Output projection dimension
+        """
         super(TSNModule, self).__init__()
 
+        # Extract configuration parameters
         self.backbone_name = config.get('backbone', 'resnet50')
         self.pretrained = config.get('pretrained', True)
         self.segment_scales = config.get('segment_scales', [[1, 1], [2, 2], [3, 3]])
@@ -84,18 +176,33 @@ class TSNModule(nn.Module):
         self.layer_norm_eps = float(config.get('layer_norm_eps', 1e-6))
 
         def init_backbone(model_class, weights_class=None, feature_dim=None):
+            """
+            Helper function to initialize backbone with proper weights.
+            
+            Args:
+                model_class: PyTorch model class
+                weights_class: Weights enum class for new torchvision API
+                feature_dim: Override feature dimension if needed
+                
+            Returns:
+                torch.nn.Module: Initialized backbone model
+            """
+            # Try new torchvision weights API first, fallback to old pretrained parameter
             if weights_class and hasattr(weights_class, 'IMAGENET1K_V1') and self.pretrained:
                 backbone = model_class(weights='IMAGENET1K_V1')
             else:
                 backbone = model_class(pretrained=self.pretrained)
 
+            # Update feature dimension if provided
             if feature_dim:
                 self.feature_dim = feature_dim
 
             return backbone
 
+        # Initialize different backbone architectures
         if self.backbone_name == 'resnet50':
             backbone = init_backbone(models.resnet50, models.ResNet50_Weights)
+            # Remove final classification layers (avgpool, fc)
             self.backbone = nn.Sequential(*list(backbone.children())[:-2])
 
         elif self.backbone_name == 'resnet101':
@@ -108,7 +215,7 @@ class TSNModule(nn.Module):
 
         elif self.backbone_name == 'inception_v3':
             backbone = init_backbone(models.inception_v3, models.Inception_V3_Weights)
-            backbone.aux_logits = False
+            backbone.aux_logits = False  # Disable auxiliary classifier
             self.backbone = nn.Sequential(*list(backbone.children())[:-1])
 
         elif self.backbone_name == 'resnet18':
@@ -126,76 +233,93 @@ class TSNModule(nn.Module):
         else:
             raise ValueError(f"Unsupported backbone: {self.backbone_name}")
 
+        # Initialize attention modules for each segmentation scale
         if self.use_attention:
             self.attention_modules = nn.ModuleList([
                 VisionLanguageAttention(self.feature_dim) for _ in range(len(self.segment_scales))
             ])
 
-        # Feature Pyramid Network for multi-scale fusion
+        # Initialize Feature Pyramid Network for multi-scale fusion
         if self.use_fpn:
             self.fpn = FeaturePyramidNetwork(self.feature_dim, self.feature_dim // 2)
             fpn_output_dim = (self.feature_dim // 2) * len(self.segment_scales)
         else:
             fpn_output_dim = self.feature_dim * len(self.segment_scales)
 
-        # Enhanced projection with residual connections
+        # Enhanced projection layer with residual connections and normalization
         self.projection = nn.Sequential(
-            nn.Linear(fpn_output_dim, fpn_output_dim // 2),
-            nn.GELU(),
-            nn.Dropout(self.dropout_rate),
-            nn.Linear(fpn_output_dim // 2, self.projection_dim),
-            nn.LayerNorm(self.projection_dim, eps=self.layer_norm_eps)
+            nn.Linear(fpn_output_dim, fpn_output_dim // 2),  # Dimensionality reduction
+            nn.GELU(),  # Smooth activation function
+            nn.Dropout(self.dropout_rate),  # Regularization
+            nn.Linear(fpn_output_dim // 2, self.projection_dim),  # Project to PaliGemma dimensions
+            nn.LayerNorm(self.projection_dim, eps=self.layer_norm_eps)  # Normalize output
         )
 
-        # Adaptive feature weighting
+        # Learnable weights for combining different scales
         self.scale_weights = nn.Parameter(torch.ones(len(self.segment_scales)))
 
-        # Cross-scale feature interaction
+        # Cross-scale attention for feature interaction between scales
         self.cross_scale_attention = nn.MultiheadAttention(
-            embed_dim=self.feature_dim, num_heads=8, dropout=self.dropout_rate, batch_first=True
+            embed_dim=self.feature_dim, 
+            num_heads=8, 
+            dropout=self.dropout_rate, 
+            batch_first=True
         )
 
     def forward(self, x):
+        """
+        Forward pass of TSN module.
+        
+        Args:
+            x (torch.Tensor): Input image tensor [B, C, H, W]
+            
+        Returns:
+            torch.Tensor: Projected feature representation [B, projection_dim]
+        """
         batch_size = x.size(0)
-        all_features = []
-        all_raw_features = []
-        attention_maps = []
+        all_features = []  # Store features from all scales
+        all_raw_features = []  # Store raw features before attention
+        attention_maps = []  # Store attention maps for visualization
 
-        # Ensure minimum input size
+        # Ensure minimum input size for backbone processing
         if x.size(2) < 224 or x.size(3) < 224:
             x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
 
+        # Process each segmentation scale
         for i, scale in enumerate(self.segment_scales):
             h_segments, w_segments = scale
-            h_size = max(1, x.size(2) // h_segments)
-            w_size = max(1, x.size(3) // w_segments)
+            h_size = max(1, x.size(2) // h_segments)  # Height of each segment
+            w_size = max(1, x.size(3) // w_segments)  # Width of each segment
 
             scale_features = []
             scale_raw_features = []
             scale_attention_maps = []
 
+            # Process each segment within the current scale
             for h_idx in range(h_segments):
                 for w_idx in range(w_segments):
+                    # Calculate segment boundaries
                     h_start = h_idx * h_size
                     h_end = (h_idx + 1) * h_size if h_idx < h_segments - 1 else x.size(2)
                     w_start = w_idx * w_size
                     w_end = (w_idx + 1) * w_size if w_idx < w_segments - 1 else x.size(3)
 
+                    # Extract segment from input image
                     segment = x[:, :, h_start:h_end, w_start:w_end]
 
-                    # Skip small segments
+                    # Skip segments that are too small for processing
                     if segment.size(2) < 32 or segment.size(3) < 32:
                         continue
 
-                    # Resize to standard input size
+                    # Resize segment to standard input size for backbone
                     segment = F.interpolate(segment, size=(224, 224), mode='bilinear', align_corners=False)
 
                     try:
-                        # Extract features
+                        # Extract features using backbone CNN
                         raw_features = self.backbone(segment)
                         scale_raw_features.append(raw_features)
 
-                        # Apply attention if enabled
+                        # Apply attention mechanism if enabled
                         if self.use_attention:
                             enhanced_features, attention = self.attention_modules[i](raw_features)
                             scale_attention_maps.append(attention)

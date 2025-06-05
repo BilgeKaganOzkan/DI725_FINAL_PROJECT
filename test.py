@@ -10,6 +10,8 @@ from PIL import Image
 from tqdm import tqdm
 import argparse
 import matplotlib.pyplot as plt
+
+# Natural Language Processing libraries for evaluation metrics
 import nltk
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from nltk.translate.meteor_score import meteor_score
@@ -17,14 +19,17 @@ from rouge_score import rouge_scorer
 from pycocoevalcap.cider.cider import Cider
 from pycocoevalcap.spice.spice import Spice
 from bert_score import score as bert_score
+
+# Suppress warnings for cleaner output
 import warnings
 warnings.filterwarnings('ignore')
 
+# HuggingFace transformers for PaliGemma model
 from transformers import PaliGemmaProcessor, PaliGemmaForConditionalGeneration
 from peft import PeftModel
 from models.tsn_paligemma_model import create_tsn_paligemma_model
 
-# Download required NLTK data
+# Download required NLTK data if not already present
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
@@ -35,18 +40,45 @@ except LookupError:
     nltk.download('wordnet')
 
 class ModelTester:
+    """
+    Comprehensive testing and evaluation framework for comparing 
+    base PaliGemma model with TSN-enhanced version.
+    
+    This class handles:
+    - Model loading (base and TSN-enhanced)
+    - Caption generation
+    - Multiple evaluation metrics (BLEU, ROUGE, METEOR, CIDEr, SPICE, BERTScore)
+    - Statistical analysis and visualization
+    - Results saving and WandB integration
+    """
+    
     def __init__(self, config_path="config/config.yaml", model_path=None, test_data_path=None):
+        """
+        Initialize the ModelTester with configuration and paths.
+        
+        Args:
+            config_path (str): Path to YAML configuration file
+            model_path (str): Optional specific path to trained model
+            test_data_path (str): Optional specific path to test dataset
+        """
+        # Load configuration from YAML file
         self.config = self.load_config(config_path)
+        
+        # Set device (CUDA if available, else CPU)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        # Create output directory for test results
         self.output_dir = "test_outputs"
         os.makedirs(self.output_dir, exist_ok=True)
 
+        # Get base model identifier from config
         self.base_model_id = self.config['model']['model_id']
 
+        # Determine trained model path (prioritize best_model over final_model)
         if model_path:
             self.trained_model_path = model_path
         else:
-            # Prioritize best_model over final_model
+            # Check for best model first, then final model
             best_model_path = os.path.join(self.config['output']['output_dir'], "best_model")
             final_model_path = os.path.join(self.config['output']['output_dir'], "final_model")
 
@@ -60,31 +92,50 @@ class ModelTester:
                 raise FileNotFoundError("No trained model found in output directory")
 
         self.test_data_path = test_data_path
+        
+        # Print initialization summary
         print(f"[SUCCESS] Initialized tester")
         print(f"   Base model: {self.base_model_id}")
         print(f"   Trained model: {self.trained_model_path}")
         print(f"   Device: {self.device}")
 
     def load_config(self, config_path):
-        """Load configuration from YAML file"""
+        """
+        Load configuration from YAML file.
+        
+        Args:
+            config_path (str): Path to configuration file
+            
+        Returns:
+            dict: Configuration dictionary
+        """
         with open(config_path, 'r') as f:
             return yaml.safe_load(f)
 
     def load_test_data(self):
-        """Load test dataset with max_val_samples limit"""
+        """
+        Load test dataset with optional sample limiting from configuration.
+        
+        Returns:
+            pd.DataFrame: Test dataset dataframe
+        """
+        # Determine test data path
         if self.test_data_path:
             test_csv = self.test_data_path
         else:
+            # Try processed test dataset first, fallback to validation set
             test_csv = 'processed_dataset/test.csv'
             if not os.path.exists(test_csv):
                 test_csv = self.config['data']['val_csv']
 
+        # Verify file exists
         if not os.path.exists(test_csv):
             raise FileNotFoundError(f"Test dataset not found at: {test_csv}")
 
+        # Load CSV data
         df = pd.read_csv(test_csv)
 
-        # Apply max_val_samples limit from config
+        # Apply sample limit if specified in config
         max_samples = self.config['data'].get('max_val_samples', -1)
         if max_samples > 0 and len(df) > max_samples:
             df = df.head(max_samples)
@@ -95,23 +146,45 @@ class ModelTester:
         return df
 
     def load_base_model(self):
+        """
+        Load the base PaliGemma model without any fine-tuning.
+        
+        Returns:
+            tuple: (model, processor) - Base PaliGemma model and processor
+        """
         print("[LOADING] Loading base PaliGemma model...")
+        
+        # Load processor for text and image preprocessing
         processor = PaliGemmaProcessor.from_pretrained(self.base_model_id)
+        
+        # Load model with automatic device mapping and mixed precision
         model = PaliGemmaForConditionalGeneration.from_pretrained(
             self.base_model_id,
-            device_map="auto",
-            torch_dtype=torch.bfloat16
+            device_map="auto",  # Automatically distribute across available GPUs
+            torch_dtype=torch.bfloat16  # Use bfloat16 for memory efficiency
         )
         print("[SUCCESS] Base model loaded")
         return model, processor
 
     def load_trained_model(self):
+        """
+        Load the fine-tuned TSN-integrated PaliGemma model.
+        
+        This method:
+        1. Loads the base PaliGemma model
+        2. Applies LoRA adapter
+        3. Wraps with TSN enhancement if available
+        
+        Returns:
+            tuple: (model, processor) - TSN-enhanced model and processor
+        """
         print("[LOADING] Loading TSN-integrated trained model...")
 
+        # Verify trained model path exists
         if not os.path.exists(self.trained_model_path):
             raise FileNotFoundError(f"Trained model not found at: {self.trained_model_path}")
 
-        # Load processor
+        # Try to load processor from trained model, fallback to base if not available
         try:
             processor = PaliGemmaProcessor.from_pretrained(self.trained_model_path)
             print("[SUCCESS] Loaded processor from trained model")
@@ -119,7 +192,7 @@ class ModelTester:
             print("[WARNING]  Using base processor")
             processor = PaliGemmaProcessor.from_pretrained(self.base_model_id)
 
-        # Load base model first
+        # Load base PaliGemma model first
         print("[LOADING] Loading base PaliGemma model...")
         base_model = PaliGemmaForConditionalGeneration.from_pretrained(
             self.base_model_id,
@@ -127,7 +200,7 @@ class ModelTester:
             torch_dtype=torch.bfloat16
         )
 
-        # Apply LoRA adapter
+        # Apply LoRA (Low-Rank Adaptation) fine-tuning adapter
         print("[LOADING] Applying LoRA adapter...")
         try:
             model = PeftModel.from_pretrained(base_model, self.trained_model_path)
@@ -135,10 +208,10 @@ class ModelTester:
         except Exception as e:
             raise RuntimeError(f"Could not load LoRA adapter: {e}")
 
-        # Wrap with TSN if config exists
+        # Wrap with TSN (Temporal Spatial Networks) enhancement if available
         print("[LOADING] Checking for TSN integration...")
         try:
-            # TSN model expects the LoRA-adapted model, not the base model
+            # Create TSN wrapper around the LoRA-adapted model
             tsn_model = create_tsn_paligemma_model(model, self.config)
             print("[SUCCESS] TSN wrapper applied successfully")
             return tsn_model, processor
@@ -147,12 +220,24 @@ class ModelTester:
             return model, processor
 
     def calculate_loss(self, model, processor, test_data, model_name):
+        """
+        Calculate average loss on test dataset for given model.
+        
+        Args:
+            model: Model to evaluate
+            processor: Text/image processor
+            test_data (pd.DataFrame): Test dataset
+            model_name (str): Name for logging purposes
+            
+        Returns:
+            tuple: (average_loss, valid_samples) - Loss value and number of processed samples
+        """
         print(f"[LOADING] Calculating loss for {model_name}...")
-        model.eval()
+        model.eval()  # Set model to evaluation mode
         total_loss = 0.0
         valid_samples = 0
 
-        # Use all test data for loss calculation
+        # Use all test data for comprehensive loss calculation
         test_sample = test_data
         total_samples = len(test_sample)
         print(f"[DATA] Calculating loss on ALL {total_samples} samples")
@@ -161,7 +246,9 @@ class ModelTester:
         batch_size = 4
         total_batches = (len(test_sample) + batch_size - 1) // batch_size
 
+        # Disable gradient computation for inference
         with torch.no_grad():
+            # Process each batch with progress tracking
             for batch_idx in tqdm(range(total_batches), desc=f"Loss Calculation - {model_name}"):
                 start_idx = batch_idx * batch_size
                 end_idx = min(start_idx + batch_size, len(test_sample))
@@ -172,22 +259,25 @@ class ModelTester:
                     batch_texts = []
                     batch_labels = []
 
-                    # Prepare batch data
+                    # Prepare batch data by processing each sample
                     for _, row in batch_df.iterrows():
+                        # Normalize image path for cross-platform compatibility
                         img_path = os.path.normpath(row['image_path']).replace('\\', '/')
                         caption = row['caption']
 
+                        # Skip missing images
                         if not os.path.exists(img_path):
                             continue
 
+                        # Load and convert image to RGB
                         image = Image.open(img_path).convert('RGB')
 
-                        # Try with suffix parameter first
+                        # Try suffix-based processing first (newer PaliGemma format)
                         try:
                             inputs = processor(
                                 text=["<image>"],
                                 images=[image],
-                                suffix=[caption],
+                                suffix=[caption],  # Caption as suffix for training format
                                 return_tensors="pt",
                                 padding="longest"
                             )
@@ -195,10 +285,9 @@ class ModelTester:
                             batch_texts.append("<image>")
 
                         except (AttributeError, TypeError):
-                            # Fallback to manual text construction
+                            # Fallback to manual text construction for older format
                             full_text = f"<image>{caption}"
                             batch_images.append(image)
-                            batch_texts.append(full_text)
 
                     if not batch_images:
                         continue
