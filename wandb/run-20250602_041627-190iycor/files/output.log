@@ -1,0 +1,39 @@
+
+💾 SAVING RESULTS
+========================================
+🔄 Saving comprehensive comparison results...
+🔄 Calculating individual metrics for base model...
+🔄 Calculating individual metrics for TSN model...
+✅ Comprehensive comparison results saved: test_outputs/comprehensive_comparison_results.csv
+
+📊 CREATING IMPROVEMENT VISUALIZATION
+========================================
+🔄 Creating improvement visualization chart...
+✅ Improvement chart saved: test_outputs/improvement_analysis_chart.png
+
+================================================================================
+📊 COMPREHENSIVE BASE vs TSN MODEL COMPARISON RESULTS
+================================================================================
+📁 Total samples tested: 4454
+
+📊 Loss Comparison:
+   Base Model Loss: 1.2351
+   TSN Model Loss:  0.2820
+   Improvement:     +0.9532 (+77.17%)
+
+📈 NLP Evaluation Metrics Comparison:
+   BLEU Score:    0.018 → 0.181 (+929.26%)
+   METEOR Score:  0.000 → 0.000 (+0.00%)
+   ROUGE-L Score: 0.047 → 0.314 (+567.02%)
+   CIDEr Score:   0.012 → 0.747 (+6079.15%)
+   SPICE Score:   0.004 → 0.288 (+7219.04%)
+   BERTScore F1:  0.834 → 0.895 (+7.27%)
+
+📈 Basic Performance Comparison:
+   Success Rate:      1.000 → 1.000 (+0.00%)
+   Word Overlap:      0.060 → 0.550 (+813.12%)
+   Avg Caption Length: 66.3 → 114.4
+   Valid Generations:  4454/4454 → 4454/4454
+
+📁 Results saved to: test_outputs/
+================================================================================

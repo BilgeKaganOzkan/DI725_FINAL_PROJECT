@@ -1,15 +1,52 @@
+# Core Deep Learning Framework
 torch>=2.0.0
 torchvision>=0.15.0
-transformers>=4.35.0
-peft>=0.5.0
+
+# Vision-Language Models and Fine-tuning
+transformers>=4.47.0,<4.50.0
+peft>=0.7.0
 accelerate>=0.20.0
 bitsandbytes>=0.41.0
-pillow>=9.0.0
+safetensors>=0.4.0
+
+# Data Processing and Analysis
 pandas>=1.5.0
 numpy>=1.24.0
-matplotlib>=3.7.0
-pyyaml>=6.0
+Pillow>=10.0.0
+datasets>=2.14.0
+
+# Configuration Management
+PyYAML>=6.0
 tqdm>=4.65.0
-wandb>=0.15.0
-scikit-learn>=1.2.0
+
+# Machine Learning and Scientific Computing
+scikit-learn>=1.3.0
 scipy>=1.10.0
+
+# Natural Language Processing
+nltk>=3.8.1
+
+# Evaluation Metrics for Image Captioning
+pycocoevalcap>=1.2
+rouge-score>=0.1.2
+bert-score>=0.3.13
+
+# Visualization and Plotting
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Experiment Tracking and Monitoring
+wandb>=0.16.0
+
+# Development and Analysis Tools (Optional)
+jupyter>=1.0.0
+ipywidgets>=8.0.0
+
+# Code Quality Tools (Development)
+pytest>=7.0.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Additional Utilities
+requests>=2.31.0
+packaging>=23.0

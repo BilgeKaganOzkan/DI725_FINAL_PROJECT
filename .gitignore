@@ -2,4 +2,6 @@ dataset/resized/*
 .venv/*
 __pycache__/*
 */__pycache__/*
-wandb/*
+paligemma_tsn_full_dataset/best_model/*
+paligemma_tsn_full_dataset/checkpoints/*
+paligemma_tsn_full_dataset/final_model/*

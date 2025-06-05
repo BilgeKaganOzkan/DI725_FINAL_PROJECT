@@ -1,0 +1,156 @@
+_wandb:
+    value:
+        cli_version: 0.19.11
+        code_path: code/test.py
+        m: []
+        python_version: 3.11.12
+        t:
+            "1":
+                - 1
+                - 2
+                - 3
+                - 5
+                - 11
+                - 12
+                - 41
+                - 49
+                - 53
+                - 55
+                - 71
+                - 98
+                - 105
+            "2":
+                - 1
+                - 2
+                - 3
+                - 5
+                - 11
+                - 12
+                - 41
+                - 49
+                - 53
+                - 55
+                - 71
+                - 98
+                - 105
+            "3":
+                - 2
+                - 13
+                - 15
+                - 16
+                - 23
+                - 55
+            "4": 3.11.12
+            "5": 0.19.11
+            "6": 4.47.0
+            "8":
+                - 5
+            "12": 0.19.11
+            "13": linux-x86_64
+data:
+    value:
+        max_train_samples: -1
+        max_val_samples: -1
+        train_csv: processed_dataset/train.csv
+        val_csv: processed_dataset/val.csv
+evaluation:
+    value:
+        do_sample: false
+        early_stopping: true
+        eval_during_training: true
+        generate_max_length: 512
+        max_new_tokens: 50
+        min_length: 5
+        no_repeat_ngram_size: 3
+        num_beams: 1
+        repetition_penalty: 1.2
+        temperature: 1
+        top_p: 1
+lora:
+    value:
+        lora_alpha: 16
+        lora_dropout: 0.1
+        r: 8
+        target_modules:
+            - q_proj
+            - o_proj
+            - k_proj
+            - v_proj
+            - gate_proj
+            - up_proj
+            - down_proj
+model:
+    value:
+        feature_dim: 1024
+        loss_type: ForCausalLMLoss
+        max_seq_length: 512
+        model_id: google/paligemma-3b-mix-224
+output:
+    value:
+        output_dir: paligemma_tsn_full_dataset
+        save_every_n_epochs: 1
+prompt:
+    value:
+        input_prompt: caption en
+        mask_prefix: ""
+        training_template: caption en {caption}
+quantization:
+    value:
+        bnb_4bit_compute_dtype: bfloat16
+        bnb_4bit_quant_type: nf4
+        enable_quantization: true
+        load_in_4bit: true
+training:
+    value:
+        batch_size: 8
+        gradient_accumulation_steps: 1
+        label_smoothing: 0
+        learning_rate: 8e-05
+        mixed_precision: true
+        num_epochs: 3
+        seed: 42
+        use_wandb: true
+        warmup_steps: 50
+        weight_decay: 1e-06
+tsn:
+    value:
+        adaptive_mixing: true
+        backbone: resnet50
+        dropout_rate: 0.1
+        feature_dim: 2048
+        feature_enhancement: true
+        final_original_ratio: 0.8
+        final_tsn_ratio: 0.2
+        gen_original_ratio: 0.85
+        gen_tsn_ratio: 0.15
+        initial_original_ratio: 0.95
+        initial_tsn_ratio: 0.05
+        integration_method: vision_tower
+        layer_norm_eps: "1e-6"
+        pretrained: true
+        progressive_steps: 1000
+        projection_dim: 1152
+        segment_scales:
+            - - 1
+              - 1
+            - - 2
+              - 2
+            - - 4
+              - 4
+        spatial_awareness: true
+        use_attention: true
+        use_fpn: true
+        warmup_tsn_steps: 200
+wandb:
+    value:
+        log_freq: 50
+        log_model: true
+        project: paligemma-tsn-full-dataset
+        run_name: full-dataset-training
+        tags:
+            - paligemma
+            - tsn
+            - qlora
+            - risc
+            - full-dataset
+        test_run_name: full-dataset-test

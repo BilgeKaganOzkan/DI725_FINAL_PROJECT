@@ -1,0 +1,1 @@
+{"columns": ["Step", "Sample_ID", "Ground_Truth", "Generated", "GT_Length", "Gen_Length", "Quality", "TSN_Ratio"], "data": [[200, 912, "the sea is beating the wide beach .", "The beach is next to the blue ocean .", 35, 37, 1.0, "0.050"]]}

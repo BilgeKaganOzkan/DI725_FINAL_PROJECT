@@ -1,0 +1,772 @@
+`config.hidden_act` is ignored, you should use `config.hidden_activation` instead.
+Gemma's activation function will be set to `gelu_pytorch_tanh`. Please, use
+`config.hidden_activation` if you want to override this behaviour.
+See https://github.com/huggingface/transformers/pull/29402 for more details.
+Loading checkpoint shards: 100%|█████████████████| 3/3 [00:04<00:00,  1.37s/it]
+trainable params: 11,298,816 || all params: 2,934,765,296 || trainable%: 0.3850
+
+Integrating TSN for enhanced vision-language performance...
+TSN-PaliGemma model created successfully!
+Loaded 35614 samples for train
+Loaded 4453 samples for validation
+Loaded validation dataset with 4453 samples
+  1%|▌                                   | 199/13356 [02:34<2:46:34,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 3.9977, 'grad_norm': 1.7912797927856445, 'learning_rate': 8e-05, 'epoch': 0.01}
+{'loss': 2.5935, 'grad_norm': 2.186673402786255, 'learning_rate': 7.969938373666016e-05, 'epoch': 0.02}
+{'loss': 2.2954, 'grad_norm': 3.091452121734619, 'learning_rate': 7.939876747332032e-05, 'epoch': 0.03}
+  3%|█                                   | 399/13356 [05:46<2:46:04,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 2.056, 'grad_norm': 3.144771099090576, 'learning_rate': 7.909815120998047e-05, 'epoch': 0.04}
+{'loss': 1.977, 'grad_norm': 3.8602635860443115, 'learning_rate': 7.879753494664063e-05, 'epoch': 0.06}
+{'loss': 1.9102, 'grad_norm': 3.9538638591766357, 'learning_rate': 7.849691868330077e-05, 'epoch': 0.07}
+{'loss': 1.7961, 'grad_norm': 4.681814670562744, 'learning_rate': 7.819630241996092e-05, 'epoch': 0.08}
+  4%|█▌                                  | 599/13356 [09:12<2:44:21,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.7824, 'grad_norm': 4.814187049865723, 'learning_rate': 7.789568615662108e-05, 'epoch': 0.09}
+{'loss': 1.6777, 'grad_norm': 5.410229682922363, 'learning_rate': 7.759506989328123e-05, 'epoch': 0.1}
+{'loss': 1.6155, 'grad_norm': 4.587357997894287, 'learning_rate': 7.729445362994139e-05, 'epoch': 0.11}
+{'loss': 1.5674, 'grad_norm': 4.403512001037598, 'learning_rate': 7.699383736660154e-05, 'epoch': 0.12}
+  6%|██▏                                 | 799/13356 [12:27<2:39:03,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.5325, 'grad_norm': 4.157255172729492, 'learning_rate': 7.66932211032617e-05, 'epoch': 0.13}
+{'loss': 1.5528, 'grad_norm': 4.931862831115723, 'learning_rate': 7.639260483992185e-05, 'epoch': 0.15}
+{'loss': 1.4608, 'grad_norm': 4.9764909744262695, 'learning_rate': 7.6091988576582e-05, 'epoch': 0.16}
+{'loss': 1.4764, 'grad_norm': 6.375430583953857, 'learning_rate': 7.579137231324215e-05, 'epoch': 0.17}
+  7%|██▋                                 | 999/13356 [15:41<2:37:59,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.3622, 'grad_norm': 4.498818874359131, 'learning_rate': 7.54907560499023e-05, 'epoch': 0.18}
+{'loss': 1.428, 'grad_norm': 5.960718154907227, 'learning_rate': 7.519013978656246e-05, 'epoch': 0.19}
+{'loss': 1.3992, 'grad_norm': 5.393185615539551, 'learning_rate': 7.488952352322261e-05, 'epoch': 0.2}
+{'loss': 1.3966, 'grad_norm': 8.034558296203613, 'learning_rate': 7.458890725988277e-05, 'epoch': 0.21}
+  9%|███▏                               | 1199/13356 [19:04<2:37:17,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.3103, 'grad_norm': 4.9677557945251465, 'learning_rate': 7.428829099654292e-05, 'epoch': 0.22}
+{'loss': 1.3832, 'grad_norm': 5.5898823738098145, 'learning_rate': 7.398767473320307e-05, 'epoch': 0.24}
+{'loss': 1.3307, 'grad_norm': 4.417891025543213, 'learning_rate': 7.368705846986323e-05, 'epoch': 0.25}
+{'loss': 1.2732, 'grad_norm': 6.975287914276123, 'learning_rate': 7.338644220652338e-05, 'epoch': 0.26}
+ 10%|███▋                               | 1399/13356 [22:17<2:30:51,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.3236, 'grad_norm': 7.702938079833984, 'learning_rate': 7.308582594318353e-05, 'epoch': 0.27}
+{'loss': 1.3808, 'grad_norm': 5.9665374755859375, 'learning_rate': 7.278520967984368e-05, 'epoch': 0.28}
+{'loss': 1.314, 'grad_norm': 5.9401631355285645, 'learning_rate': 7.248459341650384e-05, 'epoch': 0.29}
+{'loss': 1.2548, 'grad_norm': 5.5257954597473145, 'learning_rate': 7.218397715316399e-05, 'epoch': 0.3}
+ 12%|████▏                              | 1599/13356 [25:38<2:31:48,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.3202, 'grad_norm': 5.966773509979248, 'learning_rate': 7.188336088982414e-05, 'epoch': 0.31}
+{'loss': 1.2608, 'grad_norm': 6.411700248718262, 'learning_rate': 7.15827446264843e-05, 'epoch': 0.33}
+{'loss': 1.2659, 'grad_norm': 6.775714874267578, 'learning_rate': 7.128212836314445e-05, 'epoch': 0.34}
+{'loss': 1.1804, 'grad_norm': 7.9006571769714355, 'learning_rate': 7.098151209980461e-05, 'epoch': 0.35}
+ 13%|████▋                              | 1799/13356 [28:14<2:26:19,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.2898, 'grad_norm': 5.981271266937256, 'learning_rate': 7.068089583646476e-05, 'epoch': 0.36}
+{'loss': 1.2329, 'grad_norm': 6.289068698883057, 'learning_rate': 7.03802795731249e-05, 'epoch': 0.37}
+{'loss': 1.1858, 'grad_norm': 5.677669525146484, 'learning_rate': 7.007966330978506e-05, 'epoch': 0.38}
+{'loss': 1.1916, 'grad_norm': 5.523875713348389, 'learning_rate': 6.977904704644521e-05, 'epoch': 0.39}
+ 15%|█████▏                             | 1999/13356 [30:48<2:26:35,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.2032, 'grad_norm': 5.476874351501465, 'learning_rate': 6.947843078310537e-05, 'epoch': 0.4}
+{'loss': 1.2579, 'grad_norm': 5.517701625823975, 'learning_rate': 6.917781451976552e-05, 'epoch': 0.42}
+{'loss': 1.2642, 'grad_norm': 6.091733455657959, 'learning_rate': 6.887719825642568e-05, 'epoch': 0.43}
+{'loss': 1.2108, 'grad_norm': 6.896666526794434, 'learning_rate': 6.857658199308583e-05, 'epoch': 0.44}
+ 16%|█████▊                             | 2199/13356 [33:38<2:24:04,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.1103, 'grad_norm': 6.5509419441223145, 'learning_rate': 6.827596572974599e-05, 'epoch': 0.45}
+{'loss': 1.1492, 'grad_norm': 5.326021671295166, 'learning_rate': 6.797534946640614e-05, 'epoch': 0.46}
+{'loss': 1.2095, 'grad_norm': 5.606278896331787, 'learning_rate': 6.767473320306628e-05, 'epoch': 0.47}
+{'loss': 1.1022, 'grad_norm': 5.43991756439209, 'learning_rate': 6.737411693972644e-05, 'epoch': 0.48}
+ 18%|██████▎                            | 2399/13356 [36:12<2:18:26,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.1306, 'grad_norm': 6.391327381134033, 'learning_rate': 6.70735006763866e-05, 'epoch': 0.49}
+{'loss': 1.1122, 'grad_norm': 5.1535515785217285, 'learning_rate': 6.677288441304675e-05, 'epoch': 0.51}
+{'loss': 1.1366, 'grad_norm': 4.586600303649902, 'learning_rate': 6.64722681497069e-05, 'epoch': 0.52}
+{'loss': 1.1485, 'grad_norm': 4.526915073394775, 'learning_rate': 6.617165188636706e-05, 'epoch': 0.53}
+ 19%|██████▊                            | 2599/13356 [38:54<2:17:34,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.162, 'grad_norm': 6.561939239501953, 'learning_rate': 6.587103562302721e-05, 'epoch': 0.54}
+{'loss': 1.1265, 'grad_norm': 5.610668659210205, 'learning_rate': 6.557041935968737e-05, 'epoch': 0.55}
+{'loss': 1.1098, 'grad_norm': 5.645306587219238, 'learning_rate': 6.526980309634752e-05, 'epoch': 0.56}
+{'loss': 1.1862, 'grad_norm': 6.620157718658447, 'learning_rate': 6.496918683300766e-05, 'epoch': 0.57}
+ 21%|███████▎                           | 2799/13356 [41:28<2:12:34,  1.33it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.1064, 'grad_norm': 6.226708889007568, 'learning_rate': 6.466857056966782e-05, 'epoch': 0.58}
+{'loss': 1.1331, 'grad_norm': 4.597040176391602, 'learning_rate': 6.436795430632797e-05, 'epoch': 0.6}
+{'loss': 1.1326, 'grad_norm': 5.4213738441467285, 'learning_rate': 6.406733804298813e-05, 'epoch': 0.61}
+{'loss': 1.1071, 'grad_norm': 6.70244836807251, 'learning_rate': 6.376672177964828e-05, 'epoch': 0.62}
+ 22%|███████▊                           | 2999/13356 [44:03<2:13:24,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.1656, 'grad_norm': 5.30604362487793, 'learning_rate': 6.346610551630844e-05, 'epoch': 0.63}
+{'loss': 1.1616, 'grad_norm': 7.216176986694336, 'learning_rate': 6.316548925296859e-05, 'epoch': 0.64}
+{'loss': 1.1091, 'grad_norm': 7.3901824951171875, 'learning_rate': 6.286487298962875e-05, 'epoch': 0.65}
+{'loss': 1.0713, 'grad_norm': 5.058562278747559, 'learning_rate': 6.25642567262889e-05, 'epoch': 0.66}
+ 24%|████████▍                          | 3199/13356 [46:45<2:09:07,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.029, 'grad_norm': 6.568004608154297, 'learning_rate': 6.226364046294904e-05, 'epoch': 0.67}
+{'loss': 1.0508, 'grad_norm': 4.915748596191406, 'learning_rate': 6.19630241996092e-05, 'epoch': 0.69}
+{'loss': 1.1052, 'grad_norm': 7.087031364440918, 'learning_rate': 6.166240793626935e-05, 'epoch': 0.7}
+{'loss': 1.0502, 'grad_norm': 5.1128692626953125, 'learning_rate': 6.136179167292951e-05, 'epoch': 0.71}
+ 25%|████████▉                          | 3399/13356 [49:19<2:07:07,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.071, 'grad_norm': 5.254932403564453, 'learning_rate': 6.106117540958966e-05, 'epoch': 0.72}
+{'loss': 1.06, 'grad_norm': 5.878965854644775, 'learning_rate': 6.076055914624982e-05, 'epoch': 0.73}
+{'loss': 1.0738, 'grad_norm': 4.905094623565674, 'learning_rate': 6.045994288290997e-05, 'epoch': 0.74}
+{'loss': 1.064, 'grad_norm': 5.479715824127197, 'learning_rate': 6.0159326619570126e-05, 'epoch': 0.75}
+ 27%|█████████▍                         | 3599/13356 [52:03<2:03:11,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.1285, 'grad_norm': 6.265079975128174, 'learning_rate': 5.985871035623028e-05, 'epoch': 0.76}
+{'loss': 1.0552, 'grad_norm': 5.561490535736084, 'learning_rate': 5.955809409289043e-05, 'epoch': 0.77}
+{'loss': 1.0757, 'grad_norm': 5.482494831085205, 'learning_rate': 5.925747782955058e-05, 'epoch': 0.79}
+{'loss': 1.055, 'grad_norm': 5.463621616363525, 'learning_rate': 5.895686156621073e-05, 'epoch': 0.8}
+ 28%|█████████▉                         | 3799/13356 [54:36<2:00:11,  1.33it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.1151, 'grad_norm': 4.994187831878662, 'learning_rate': 5.8656245302870887e-05, 'epoch': 0.81}
+{'loss': 1.018, 'grad_norm': 6.325241565704346, 'learning_rate': 5.835562903953104e-05, 'epoch': 0.82}
+{'loss': 1.0416, 'grad_norm': 8.472291946411133, 'learning_rate': 5.8055012776191196e-05, 'epoch': 0.83}
+{'loss': 1.087, 'grad_norm': 5.133881092071533, 'learning_rate': 5.775439651285135e-05, 'epoch': 0.84}
+ 30%|██████████▍                        | 3999/13356 [57:10<1:57:57,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.0271, 'grad_norm': 6.241606712341309, 'learning_rate': 5.7453780249511506e-05, 'epoch': 0.85}
+{'loss': 1.097, 'grad_norm': 6.512572765350342, 'learning_rate': 5.715316398617166e-05, 'epoch': 0.86}
+{'loss': 1.0294, 'grad_norm': 8.110493659973145, 'learning_rate': 5.685254772283181e-05, 'epoch': 0.88}
+{'loss': 1.041, 'grad_norm': 4.938027858734131, 'learning_rate': 5.655193145949196e-05, 'epoch': 0.89}
+ 31%|███████████                        | 4199/13356 [59:55<1:58:21,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 1.0536, 'grad_norm': 7.881797790527344, 'learning_rate': 5.625131519615211e-05, 'epoch': 0.9}
+{'loss': 0.9828, 'grad_norm': 5.639142990112305, 'learning_rate': 5.5950698932812266e-05, 'epoch': 0.91}
+{'loss': 1.0308, 'grad_norm': 6.349494934082031, 'learning_rate': 5.565008266947242e-05, 'epoch': 0.92}
+{'loss': 1.0265, 'grad_norm': 4.977765083312988, 'learning_rate': 5.5349466406132575e-05, 'epoch': 0.93}
+ 33%|██████████▊                      | 4399/13356 [1:02:29<1:54:18,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.9639, 'grad_norm': 6.979005336761475, 'learning_rate': 5.504885014279273e-05, 'epoch': 0.94}
+{'loss': 0.994, 'grad_norm': 9.141133308410645, 'learning_rate': 5.4748233879452885e-05, 'epoch': 0.95}
+{'loss': 0.9717, 'grad_norm': 6.728109359741211, 'learning_rate': 5.444761761611304e-05, 'epoch': 0.97}
+{'loss': 1.017, 'grad_norm': 4.874754905700684, 'learning_rate': 5.414700135277319e-05, 'epoch': 0.98}
+ 34%|███████████▎                     | 4599/13356 [1:05:14<1:51:15,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.9498, 'grad_norm': 7.882564067840576, 'learning_rate': 5.384638508943334e-05, 'epoch': 0.99}
+{'loss': 1.0176, 'grad_norm': 5.792617321014404, 'learning_rate': 5.354576882609349e-05, 'epoch': 1.0}
+{'loss': 0.9399, 'grad_norm': 5.380051612854004, 'learning_rate': 5.3245152562753645e-05, 'epoch': 1.01}
+{'loss': 0.8597, 'grad_norm': 5.452298641204834, 'learning_rate': 5.29445362994138e-05, 'epoch': 1.02}
+ 36%|███████████▊                     | 4799/13356 [1:07:48<1:49:44,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.9342, 'grad_norm': 9.018322944641113, 'learning_rate': 5.2643920036073955e-05, 'epoch': 1.03}
+{'loss': 0.8632, 'grad_norm': 7.0269999504089355, 'learning_rate': 5.234330377273411e-05, 'epoch': 1.04}
+{'loss': 0.8432, 'grad_norm': 5.538262367248535, 'learning_rate': 5.2042687509394264e-05, 'epoch': 1.06}
+{'loss': 0.8863, 'grad_norm': 9.679817199707031, 'learning_rate': 5.174207124605442e-05, 'epoch': 1.07}
+ 37%|████████████▎                    | 4999/13356 [1:10:23<1:45:00,  1.33it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.9079, 'grad_norm': 7.022806167602539, 'learning_rate': 5.144145498271457e-05, 'epoch': 1.08}
+{'loss': 0.889, 'grad_norm': 7.375431537628174, 'learning_rate': 5.114083871937472e-05, 'epoch': 1.09}
+{'loss': 0.9412, 'grad_norm': 7.56198787689209, 'learning_rate': 5.0840222456034877e-05, 'epoch': 1.1}
+{'loss': 0.8531, 'grad_norm': 6.270946502685547, 'learning_rate': 5.0539606192695025e-05, 'epoch': 1.11}
+ 39%|████████████▊                    | 5199/13356 [1:13:05<1:42:33,  1.33it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8932, 'grad_norm': 5.689192771911621, 'learning_rate': 5.023898992935518e-05, 'epoch': 1.12}
+{'loss': 0.8307, 'grad_norm': 5.319528579711914, 'learning_rate': 4.9938373666015334e-05, 'epoch': 1.13}
+{'loss': 0.8477, 'grad_norm': 7.029897689819336, 'learning_rate': 4.963775740267549e-05, 'epoch': 1.15}
+{'loss': 0.8776, 'grad_norm': 6.119673728942871, 'learning_rate': 4.9337141139335644e-05, 'epoch': 1.16}
+ 40%|█████████████▎                   | 5399/13356 [1:15:39<1:41:09,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8634, 'grad_norm': 7.766534805297852, 'learning_rate': 4.90365248759958e-05, 'epoch': 1.17}
+{'loss': 0.8322, 'grad_norm': 6.324251651763916, 'learning_rate': 4.8735908612655946e-05, 'epoch': 1.18}
+{'loss': 0.8991, 'grad_norm': 6.885783672332764, 'learning_rate': 4.84352923493161e-05, 'epoch': 1.19}
+{'loss': 0.8537, 'grad_norm': 7.593237400054932, 'learning_rate': 4.8134676085976256e-05, 'epoch': 1.2}
+ 42%|█████████████▊                   | 5599/13356 [1:18:23<1:38:25,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8943, 'grad_norm': 4.656233310699463, 'learning_rate': 4.7834059822636404e-05, 'epoch': 1.21}
+{'loss': 0.9259, 'grad_norm': 4.930857181549072, 'learning_rate': 4.753344355929656e-05, 'epoch': 1.22}
+{'loss': 0.8803, 'grad_norm': 4.37328577041626, 'learning_rate': 4.7232827295956713e-05, 'epoch': 1.24}
+{'loss': 0.8641, 'grad_norm': 6.688238620758057, 'learning_rate': 4.693221103261687e-05, 'epoch': 1.25}
+ 43%|██████████████▎                  | 5799/13356 [1:20:56<1:36:36,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8468, 'grad_norm': 6.372154712677002, 'learning_rate': 4.663159476927702e-05, 'epoch': 1.26}
+{'loss': 0.9017, 'grad_norm': 6.942198753356934, 'learning_rate': 4.633097850593718e-05, 'epoch': 1.27}
+{'loss': 0.8492, 'grad_norm': 8.760298728942871, 'learning_rate': 4.6030362242597326e-05, 'epoch': 1.28}
+{'loss': 0.9158, 'grad_norm': 9.668818473815918, 'learning_rate': 4.572974597925748e-05, 'epoch': 1.29}
+ 45%|██████████████▊                  | 5999/13356 [1:23:31<1:33:12,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.9172, 'grad_norm': 5.494026184082031, 'learning_rate': 4.5429129715917635e-05, 'epoch': 1.3}
+{'loss': 0.9512, 'grad_norm': 7.377268314361572, 'learning_rate': 4.512851345257779e-05, 'epoch': 1.31}
+{'loss': 0.8617, 'grad_norm': 4.503187656402588, 'learning_rate': 4.482789718923794e-05, 'epoch': 1.33}
+{'loss': 0.8435, 'grad_norm': 4.9788312911987305, 'learning_rate': 4.452728092589809e-05, 'epoch': 1.34}
+ 46%|███████████████▎                 | 6199/13356 [1:26:12<1:30:54,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7888, 'grad_norm': 6.688017845153809, 'learning_rate': 4.422666466255825e-05, 'epoch': 1.35}
+{'loss': 0.8265, 'grad_norm': 6.1936187744140625, 'learning_rate': 4.39260483992184e-05, 'epoch': 1.36}
+{'loss': 0.8151, 'grad_norm': 5.529891014099121, 'learning_rate': 4.362543213587856e-05, 'epoch': 1.37}
+{'loss': 0.8724, 'grad_norm': 6.1049909591674805, 'learning_rate': 4.3324815872538705e-05, 'epoch': 1.38}
+ 48%|███████████████▊                 | 6399/13356 [1:28:46<1:28:35,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.9038, 'grad_norm': 5.076977729797363, 'learning_rate': 4.302419960919886e-05, 'epoch': 1.39}
+{'loss': 0.8435, 'grad_norm': 7.402783393859863, 'learning_rate': 4.2723583345859015e-05, 'epoch': 1.4}
+{'loss': 0.9191, 'grad_norm': 4.810978412628174, 'learning_rate': 4.242296708251917e-05, 'epoch': 1.42}
+{'loss': 0.9144, 'grad_norm': 8.6123628616333, 'learning_rate': 4.212235081917932e-05, 'epoch': 1.43}
+ 49%|████████████████▎                | 6599/13356 [1:31:34<1:25:03,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8505, 'grad_norm': 5.2307281494140625, 'learning_rate': 4.182173455583947e-05, 'epoch': 1.44}
+{'loss': 0.8367, 'grad_norm': 7.355074405670166, 'learning_rate': 4.152111829249963e-05, 'epoch': 1.45}
+{'loss': 0.869, 'grad_norm': 4.897353649139404, 'learning_rate': 4.122050202915978e-05, 'epoch': 1.46}
+{'loss': 0.8889, 'grad_norm': 6.690210342407227, 'learning_rate': 4.0919885765819936e-05, 'epoch': 1.47}
+ 51%|████████████████▊                | 6799/13356 [1:34:09<1:23:09,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7995, 'grad_norm': 7.2135090827941895, 'learning_rate': 4.0619269502480084e-05, 'epoch': 1.48}
+{'loss': 0.8117, 'grad_norm': 6.7344536781311035, 'learning_rate': 4.031865323914024e-05, 'epoch': 1.49}
+{'loss': 0.8458, 'grad_norm': 5.336709022521973, 'learning_rate': 4.0018036975800394e-05, 'epoch': 1.5}
+{'loss': 0.8618, 'grad_norm': 7.7025346755981445, 'learning_rate': 3.971742071246055e-05, 'epoch': 1.52}
+ 52%|█████████████████▎               | 6999/13356 [1:36:44<1:21:14,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8468, 'grad_norm': 5.664646148681641, 'learning_rate': 3.9416804449120704e-05, 'epoch': 1.53}
+{'loss': 0.8873, 'grad_norm': 6.983441352844238, 'learning_rate': 3.911618818578085e-05, 'epoch': 1.54}
+{'loss': 0.8115, 'grad_norm': 4.856544017791748, 'learning_rate': 3.8815571922441006e-05, 'epoch': 1.55}
+{'loss': 0.8085, 'grad_norm': 7.064581871032715, 'learning_rate': 3.851495565910116e-05, 'epoch': 1.56}
+ 54%|█████████████████▊               | 7199/13356 [1:39:26<1:30:26,  1.13it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.82, 'grad_norm': 6.356175899505615, 'learning_rate': 3.8214339395761316e-05, 'epoch': 1.57}
+{'loss': 0.8363, 'grad_norm': 5.828240394592285, 'learning_rate': 3.7913723132421464e-05, 'epoch': 1.58}
+{'loss': 0.8487, 'grad_norm': 5.628350257873535, 'learning_rate': 3.761310686908162e-05, 'epoch': 1.59}
+{'loss': 0.8929, 'grad_norm': 5.651310443878174, 'learning_rate': 3.731249060574177e-05, 'epoch': 1.61}
+ 55%|██████████████████▎              | 7399/13356 [1:42:02<1:15:40,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8926, 'grad_norm': 7.452797889709473, 'learning_rate': 3.701187434240193e-05, 'epoch': 1.62}
+{'loss': 0.8008, 'grad_norm': 6.695797443389893, 'learning_rate': 3.671125807906208e-05, 'epoch': 1.63}
+{'loss': 0.8512, 'grad_norm': 5.850890159606934, 'learning_rate': 3.641064181572223e-05, 'epoch': 1.64}
+{'loss': 0.816, 'grad_norm': 7.1541876792907715, 'learning_rate': 3.6110025552382386e-05, 'epoch': 1.65}
+ 57%|██████████████████▊              | 7599/13356 [1:44:45<1:13:29,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8069, 'grad_norm': 6.4526166915893555, 'learning_rate': 3.580940928904254e-05, 'epoch': 1.66}
+{'loss': 0.8228, 'grad_norm': 6.054105758666992, 'learning_rate': 3.5508793025702695e-05, 'epoch': 1.67}
+{'loss': 0.8055, 'grad_norm': 8.320971488952637, 'learning_rate': 3.520817676236285e-05, 'epoch': 1.68}
+{'loss': 0.8185, 'grad_norm': 7.641412734985352, 'learning_rate': 3.4907560499023e-05, 'epoch': 1.7}
+ 58%|███████████████████▎             | 7799/13356 [1:47:19<1:11:55,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7772, 'grad_norm': 5.069484710693359, 'learning_rate': 3.460694423568315e-05, 'epoch': 1.71}
+{'loss': 0.8405, 'grad_norm': 7.1630988121032715, 'learning_rate': 3.430632797234331e-05, 'epoch': 1.72}
+{'loss': 0.8222, 'grad_norm': 7.315820693969727, 'learning_rate': 3.400571170900346e-05, 'epoch': 1.73}
+{'loss': 0.7749, 'grad_norm': 6.95343017578125, 'learning_rate': 3.370509544566362e-05, 'epoch': 1.74}
+ 60%|███████████████████▊             | 7999/13356 [1:49:54<1:07:50,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8741, 'grad_norm': 5.56289005279541, 'learning_rate': 3.3404479182323765e-05, 'epoch': 1.75}
+{'loss': 0.797, 'grad_norm': 5.245728969573975, 'learning_rate': 3.310386291898392e-05, 'epoch': 1.76}
+{'loss': 0.889, 'grad_norm': 5.7041096687316895, 'learning_rate': 3.2803246655644075e-05, 'epoch': 1.77}
+{'loss': 0.7875, 'grad_norm': 7.590261936187744, 'learning_rate': 3.250263039230423e-05, 'epoch': 1.79}
+ 61%|████████████████████▎            | 8199/13356 [1:52:40<1:05:56,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.789, 'grad_norm': 7.62059211730957, 'learning_rate': 3.220201412896438e-05, 'epoch': 1.8}
+{'loss': 0.8225, 'grad_norm': 9.425450325012207, 'learning_rate': 3.190139786562453e-05, 'epoch': 1.81}
+{'loss': 0.8146, 'grad_norm': 6.467130661010742, 'learning_rate': 3.160078160228469e-05, 'epoch': 1.82}
+{'loss': 0.8511, 'grad_norm': 8.327880859375, 'learning_rate': 3.130016533894484e-05, 'epoch': 1.83}
+ 63%|████████████████████▊            | 8399/13356 [1:55:14<1:03:37,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8292, 'grad_norm': 7.4112749099731445, 'learning_rate': 3.0999549075604996e-05, 'epoch': 1.84}
+{'loss': 0.8207, 'grad_norm': 8.77044677734375, 'learning_rate': 3.0698932812265144e-05, 'epoch': 1.85}
+{'loss': 0.8042, 'grad_norm': 4.250831127166748, 'learning_rate': 3.0398316548925296e-05, 'epoch': 1.86}
+{'loss': 0.8671, 'grad_norm': 6.6257195472717285, 'learning_rate': 3.009770028558545e-05, 'epoch': 1.88}
+ 64%|█████████████████████▏           | 8599/13356 [1:57:58<1:00:27,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7885, 'grad_norm': 6.423793315887451, 'learning_rate': 2.9797084022245605e-05, 'epoch': 1.89}
+{'loss': 0.8078, 'grad_norm': 5.294172286987305, 'learning_rate': 2.949646775890576e-05, 'epoch': 1.9}
+{'loss': 0.8533, 'grad_norm': 5.95782470703125, 'learning_rate': 2.9195851495565915e-05, 'epoch': 1.91}
+{'loss': 0.8101, 'grad_norm': 6.277441024780273, 'learning_rate': 2.8895235232226063e-05, 'epoch': 1.92}
+ 66%|███████████████████████            | 8799/13356 [2:00:33<57:43,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.8189, 'grad_norm': 5.769196033477783, 'learning_rate': 2.8594618968886218e-05, 'epoch': 1.93}
+{'loss': 0.7635, 'grad_norm': 6.991666316986084, 'learning_rate': 2.8294002705546372e-05, 'epoch': 1.94}
+{'loss': 0.8475, 'grad_norm': 5.086609363555908, 'learning_rate': 2.7993386442206527e-05, 'epoch': 1.95}
+{'loss': 0.806, 'grad_norm': 4.449521064758301, 'learning_rate': 2.769277017886668e-05, 'epoch': 1.97}
+ 67%|███████████████████████▌           | 8999/13356 [2:03:09<56:40,  1.28it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7768, 'grad_norm': 6.9983086585998535, 'learning_rate': 2.739215391552683e-05, 'epoch': 1.98}
+{'loss': 0.834, 'grad_norm': 6.843941688537598, 'learning_rate': 2.7091537652186985e-05, 'epoch': 1.99}
+{'loss': 0.8712, 'grad_norm': 6.610569953918457, 'learning_rate': 2.679092138884714e-05, 'epoch': 2.0}
+{'loss': 0.745, 'grad_norm': 8.777353286743164, 'learning_rate': 2.6490305125507294e-05, 'epoch': 2.01}
+ 69%|████████████████████████           | 9199/13356 [2:05:54<53:21,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.675, 'grad_norm': 7.489078998565674, 'learning_rate': 2.6189688862167445e-05, 'epoch': 2.02}
+{'loss': 0.6009, 'grad_norm': 7.033596515655518, 'learning_rate': 2.5889072598827597e-05, 'epoch': 2.03}
+{'loss': 0.7069, 'grad_norm': 8.80247688293457, 'learning_rate': 2.558845633548775e-05, 'epoch': 2.04}
+{'loss': 0.6941, 'grad_norm': 7.4276604652404785, 'learning_rate': 2.5287840072147906e-05, 'epoch': 2.06}
+ 70%|████████████████████████▋          | 9399/13356 [2:08:30<49:55,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6599, 'grad_norm': 6.4854230880737305, 'learning_rate': 2.4987223808808058e-05, 'epoch': 2.07}
+{'loss': 0.7077, 'grad_norm': 7.1254353523254395, 'learning_rate': 2.468660754546821e-05, 'epoch': 2.08}
+{'loss': 0.6213, 'grad_norm': 7.377341270446777, 'learning_rate': 2.4385991282128364e-05, 'epoch': 2.09}
+{'loss': 0.7061, 'grad_norm': 7.824548721313477, 'learning_rate': 2.408537501878852e-05, 'epoch': 2.1}
+ 72%|█████████████████████████▏         | 9599/13356 [2:11:13<47:10,  1.33it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6646, 'grad_norm': 5.816269874572754, 'learning_rate': 2.3784758755448673e-05, 'epoch': 2.11}
+{'loss': 0.6995, 'grad_norm': 10.410543441772461, 'learning_rate': 2.3484142492108825e-05, 'epoch': 2.12}
+{'loss': 0.7349, 'grad_norm': 6.300334453582764, 'learning_rate': 2.3183526228768976e-05, 'epoch': 2.13}
+{'loss': 0.7285, 'grad_norm': 6.78521203994751, 'learning_rate': 2.288290996542913e-05, 'epoch': 2.15}
+ 73%|█████████████████████████▋         | 9799/13356 [2:13:48<45:13,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7324, 'grad_norm': 6.1781439781188965, 'learning_rate': 2.2582293702089286e-05, 'epoch': 2.16}
+{'loss': 0.6837, 'grad_norm': 6.462805271148682, 'learning_rate': 2.2281677438749437e-05, 'epoch': 2.17}
+{'loss': 0.6969, 'grad_norm': 5.568841457366943, 'learning_rate': 2.1981061175409592e-05, 'epoch': 2.18}
+{'loss': 0.7131, 'grad_norm': 4.821008205413818, 'learning_rate': 2.1680444912069743e-05, 'epoch': 2.19}
+ 75%|██████████████████████████▏        | 9999/13356 [2:16:23<43:18,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7072, 'grad_norm': 7.736057758331299, 'learning_rate': 2.1379828648729898e-05, 'epoch': 2.2}
+{'loss': 0.6464, 'grad_norm': 6.106452941894531, 'learning_rate': 2.1079212385390053e-05, 'epoch': 2.21}
+{'loss': 0.6529, 'grad_norm': 5.091675758361816, 'learning_rate': 2.0778596122050204e-05, 'epoch': 2.22}
+{'loss': 0.7397, 'grad_norm': 6.699676036834717, 'learning_rate': 2.047797985871036e-05, 'epoch': 2.23}
+ 76%|█████████████████████████▉        | 10199/13356 [2:19:06<40:05,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6455, 'grad_norm': 6.545324325561523, 'learning_rate': 2.017736359537051e-05, 'epoch': 2.25}
+{'loss': 0.6417, 'grad_norm': 6.047294616699219, 'learning_rate': 1.9876747332030665e-05, 'epoch': 2.26}
+{'loss': 0.6918, 'grad_norm': 5.977841854095459, 'learning_rate': 1.9576131068690816e-05, 'epoch': 2.27}
+{'loss': 0.6386, 'grad_norm': 7.997058868408203, 'learning_rate': 1.927551480535097e-05, 'epoch': 2.28}
+ 78%|██████████████████████████▍       | 10399/13356 [2:21:42<37:24,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.645, 'grad_norm': 9.534221649169922, 'learning_rate': 1.8974898542011123e-05, 'epoch': 2.29}
+{'loss': 0.6736, 'grad_norm': 6.546716213226318, 'learning_rate': 1.8674282278671277e-05, 'epoch': 2.3}
+{'loss': 0.6889, 'grad_norm': 5.981539726257324, 'learning_rate': 1.8373666015331432e-05, 'epoch': 2.31}
+{'loss': 0.6902, 'grad_norm': 6.0554118156433105, 'learning_rate': 1.8073049751991584e-05, 'epoch': 2.32}
+ 79%|██████████████████████████▉       | 10599/13356 [2:24:27<34:54,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6767, 'grad_norm': 8.654655456542969, 'learning_rate': 1.7772433488651738e-05, 'epoch': 2.34}
+{'loss': 0.6833, 'grad_norm': 7.244924545288086, 'learning_rate': 1.747181722531189e-05, 'epoch': 2.35}
+{'loss': 0.6958, 'grad_norm': 7.109992504119873, 'learning_rate': 1.7171200961972044e-05, 'epoch': 2.36}
+{'loss': 0.7432, 'grad_norm': 7.190478801727295, 'learning_rate': 1.6870584698632196e-05, 'epoch': 2.37}
+ 81%|███████████████████████████▍      | 10799/13356 [2:27:02<32:37,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7047, 'grad_norm': 6.400343418121338, 'learning_rate': 1.656996843529235e-05, 'epoch': 2.38}
+{'loss': 0.6984, 'grad_norm': 6.2154622077941895, 'learning_rate': 1.6269352171952505e-05, 'epoch': 2.39}
+{'loss': 0.6773, 'grad_norm': 6.960010528564453, 'learning_rate': 1.5968735908612657e-05, 'epoch': 2.4}
+{'loss': 0.663, 'grad_norm': 6.840843200683594, 'learning_rate': 1.566811964527281e-05, 'epoch': 2.41}
+ 82%|███████████████████████████▉      | 10999/13356 [2:29:37<30:06,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6718, 'grad_norm': 6.513890743255615, 'learning_rate': 1.5367503381932963e-05, 'epoch': 2.43}
+{'loss': 0.6439, 'grad_norm': 6.144741535186768, 'learning_rate': 1.5066887118593116e-05, 'epoch': 2.44}
+{'loss': 0.6647, 'grad_norm': 8.52751350402832, 'learning_rate': 1.476627085525327e-05, 'epoch': 2.45}
+{'loss': 0.7187, 'grad_norm': 5.982952117919922, 'learning_rate': 1.4465654591913422e-05, 'epoch': 2.46}
+ 84%|████████████████████████████▌     | 11199/13356 [2:32:20<27:54,  1.29it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6719, 'grad_norm': 6.284369468688965, 'learning_rate': 1.4165038328573577e-05, 'epoch': 2.47}
+{'loss': 0.7152, 'grad_norm': 6.405149459838867, 'learning_rate': 1.3864422065233732e-05, 'epoch': 2.48}
+{'loss': 0.6705, 'grad_norm': 10.855429649353027, 'learning_rate': 1.3563805801893883e-05, 'epoch': 2.49}
+{'loss': 0.7215, 'grad_norm': 7.752251625061035, 'learning_rate': 1.3263189538554038e-05, 'epoch': 2.5}
+ 85%|█████████████████████████████     | 11399/13356 [2:34:55<25:05,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7197, 'grad_norm': 6.619736194610596, 'learning_rate': 1.2962573275214189e-05, 'epoch': 2.52}
+{'loss': 0.6787, 'grad_norm': 6.797365665435791, 'learning_rate': 1.2661957011874344e-05, 'epoch': 2.53}
+{'loss': 0.6395, 'grad_norm': 5.5468831062316895, 'learning_rate': 1.2361340748534495e-05, 'epoch': 2.54}
+{'loss': 0.6827, 'grad_norm': 10.907418251037598, 'learning_rate': 1.206072448519465e-05, 'epoch': 2.55}
+ 87%|█████████████████████████████▌    | 11599/13356 [2:37:40<22:04,  1.33it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6793, 'grad_norm': 7.989840030670166, 'learning_rate': 1.1760108221854803e-05, 'epoch': 2.56}
+{'loss': 0.6556, 'grad_norm': 7.169887065887451, 'learning_rate': 1.1459491958514956e-05, 'epoch': 2.57}
+{'loss': 0.6495, 'grad_norm': 8.996101379394531, 'learning_rate': 1.1158875695175111e-05, 'epoch': 2.58}
+{'loss': 0.6992, 'grad_norm': 6.062947750091553, 'learning_rate': 1.0858259431835262e-05, 'epoch': 2.59}
+ 88%|██████████████████████████████    | 11799/13356 [2:40:15<19:44,  1.31it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7508, 'grad_norm': 7.089761257171631, 'learning_rate': 1.0557643168495417e-05, 'epoch': 2.61}
+{'loss': 0.6867, 'grad_norm': 6.466563701629639, 'learning_rate': 1.0257026905155568e-05, 'epoch': 2.62}
+{'loss': 0.6976, 'grad_norm': 9.9702787399292, 'learning_rate': 9.956410641815723e-06, 'epoch': 2.63}
+{'loss': 0.6505, 'grad_norm': 6.7605509757995605, 'learning_rate': 9.655794378475876e-06, 'epoch': 2.64}
+ 90%|██████████████████████████████▌   | 11999/13356 [2:42:49<17:26,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.642, 'grad_norm': 6.189388275146484, 'learning_rate': 9.35517811513603e-06, 'epoch': 2.65}
+{'loss': 0.6597, 'grad_norm': 7.091447353363037, 'learning_rate': 9.054561851796182e-06, 'epoch': 2.66}
+{'loss': 0.6995, 'grad_norm': 6.5906877517700195, 'learning_rate': 8.753945588456336e-06, 'epoch': 2.67}
+{'loss': 0.6291, 'grad_norm': 7.600057125091553, 'learning_rate': 8.453329325116489e-06, 'epoch': 2.68}
+ 91%|█████████████████████████▌  | 12199/13356 [2:45:34<14:36,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.7084, 'grad_norm': 5.69788122177124, 'learning_rate': 8.152713061776643e-06, 'epoch': 2.7}
+{'loss': 0.6542, 'grad_norm': 5.679812431335449, 'learning_rate': 7.852096798436796e-06, 'epoch': 2.71}
+{'loss': 0.6609, 'grad_norm': 7.254926681518555, 'learning_rate': 7.551480535096949e-06, 'epoch': 2.72}
+{'loss': 0.7124, 'grad_norm': 7.399655818939209, 'learning_rate': 7.2508642717571035e-06, 'epoch': 2.73}
+ 93%|█████████████████████████▉  | 12399/13356 [2:48:09<12:15,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6649, 'grad_norm': 8.94981575012207, 'learning_rate': 6.9502480084172565e-06, 'epoch': 2.74}
+{'loss': 0.6074, 'grad_norm': 8.292764663696289, 'learning_rate': 6.64963174507741e-06, 'epoch': 2.75}
+{'loss': 0.6735, 'grad_norm': 7.7046051025390625, 'learning_rate': 6.349015481737563e-06, 'epoch': 2.76}
+{'loss': 0.7143, 'grad_norm': 7.575247287750244, 'learning_rate': 6.048399218397716e-06, 'epoch': 2.77}
+ 94%|██████████████████████████▍ | 12599/13356 [2:50:53<09:33,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6693, 'grad_norm': 6.908757209777832, 'learning_rate': 5.747782955057869e-06, 'epoch': 2.79}
+{'loss': 0.6899, 'grad_norm': 7.482219219207764, 'learning_rate': 5.447166691718022e-06, 'epoch': 2.8}
+{'loss': 0.6245, 'grad_norm': 6.524303436279297, 'learning_rate': 5.146550428378175e-06, 'epoch': 2.81}
+{'loss': 0.695, 'grad_norm': 7.116456985473633, 'learning_rate': 4.845934165038329e-06, 'epoch': 2.82}
+ 96%|██████████████████████████▊ | 12799/13356 [2:53:28<07:01,  1.32it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6876, 'grad_norm': 7.171477317810059, 'learning_rate': 4.545317901698482e-06, 'epoch': 2.83}
+{'loss': 0.6666, 'grad_norm': 6.144658088684082, 'learning_rate': 4.244701638358635e-06, 'epoch': 2.84}
+{'loss': 0.6677, 'grad_norm': 11.162179946899414, 'learning_rate': 3.944085375018789e-06, 'epoch': 2.85}
+{'loss': 0.7769, 'grad_norm': 8.17781925201416, 'learning_rate': 3.6434691116789424e-06, 'epoch': 2.86}
+ 97%|███████████████████████████▎| 12999/13356 [2:56:03<04:34,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.6947, 'grad_norm': 7.776731967926025, 'learning_rate': 3.3428528483390955e-06, 'epoch': 2.88}
+{'loss': 0.6885, 'grad_norm': 8.815300941467285, 'learning_rate': 3.0422365849992486e-06, 'epoch': 2.89}
+{'loss': 0.6717, 'grad_norm': 7.513570308685303, 'learning_rate': 2.7416203216594017e-06, 'epoch': 2.9}
+{'loss': 0.6549, 'grad_norm': 9.003020286560059, 'learning_rate': 2.441004058319555e-06, 'epoch': 2.91}
+ 99%|███████████████████████████▋| 13199/13356 [2:58:50<02:00,  1.30it/s]Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{'loss': 0.648, 'grad_norm': 8.262213706970215, 'learning_rate': 2.1403877949797086e-06, 'epoch': 2.92}
+{'loss': 0.6685, 'grad_norm': 10.104365348815918, 'learning_rate': 1.8397715316398617e-06, 'epoch': 2.93}
+{'loss': 0.6338, 'grad_norm': 7.283931732177734, 'learning_rate': 1.5391552683000152e-06, 'epoch': 2.94}
+{'loss': 0.7212, 'grad_norm': 6.488816738128662, 'learning_rate': 1.2385390049601683e-06, 'epoch': 2.95}
+100%|████████████████████████████| 13356/13356 [3:01:06<00:00,  1.23it/s]
+{'loss': 0.6955, 'grad_norm': 9.878816604614258, 'learning_rate': 9.379227416203217e-07, 'epoch': 2.96}
+{'loss': 0.7065, 'grad_norm': 7.474208354949951, 'learning_rate': 6.37306478280475e-07, 'epoch': 2.98}
+{'loss': 0.6612, 'grad_norm': 5.471076011657715, 'learning_rate': 3.366902149406283e-07, 'epoch': 2.99}
+{'loss': 0.6861, 'grad_norm': 6.26455020904541, 'learning_rate': 3.6073951600781607e-08, 'epoch': 3.0}
+
+🏆 New best model! Loss: 0.9382 (Step: 13356)
+
+🔍 DEBUG: Training Model Structure
+Type: <class 'models.tsn_paligemma_model.TSNPaliGemmaModel'>
+Has 'paligemma' attr: True
+Has 'module' attr: False
+PaliGemma type: <class 'peft.peft_model.PeftModelForCausalLM'>
+Attributes: ['T_destination', 'adaptive_mixing', 'add_module', 'apply', 'bfloat16', 'buffers', 'call_super_init', 'children', 'compile', 'config']
+🔧 Detected TSN wrapper, extracting PaliGemma model
+
+🔍 DEBUG: Extracted PaliGemma Model Structure
+Type: <class 'peft.peft_model.PeftModelForCausalLM'>
+Has 'paligemma' attr: False
+Has 'module' attr: False
+Attributes: ['T_destination', 'active_adapter', 'active_adapters', 'active_peft_config', 'add_adapter', 'add_module', 'apply', 'base_model', 'base_model_prepare_inputs_for_generation', 'base_model_torch_dtype']
+💾 Saving model to: paligemma_tsn_full_dataset/best_model
+✅ Best model saved to: paligemma_tsn_full_dataset/best_model
+✅ Processor saved to: paligemma_tsn_full_dataset/best_model
+✅ adapter_config.json saved successfully
+✅ adapter_model.bin saved successfully
+{'train_runtime': 10863.7954, 'train_samples_per_second': 9.835, 'train_steps_per_second': 1.229, 'train_loss': 0.9382485171819597, 'epoch': 3.0}
+
+============================================================
+💾 SAVING FINAL MODEL
+============================================================
+✅ Best model found, copying to final model directory...
+✅ Best model copied to: paligemma_tsn_full_dataset/final_model
+
+============================================================
+📋 VERIFYING SAVED MODELS
+============================================================
+
+� Final model contents:
+   📄 README.md (0.0 MB)
+   ✅ adapter_config.json (0.0 MB)
+   ✅ adapter_model.bin (43.3 MB)
+   📄 added_tokens.json (0.0 MB)
+   ✅ preprocessor_config.json (0.0 MB)
+   📄 special_tokens_map.json (0.0 MB)
+   ✅ tokenizer.json (33.0 MB)
+   📄 tokenizer.model (4.1 MB)
+   ✅ tokenizer_config.json (0.2 MB)
+   ✅ All essential model files present
+   ✅ All processor files present
+
+� Best model contents:
+   📄 README.md (0.0 MB)
+   ✅ adapter_config.json (0.0 MB)
+   ✅ adapter_model.bin (43.3 MB)
+   📄 added_tokens.json (0.0 MB)
+   ✅ preprocessor_config.json (0.0 MB)
+   📄 special_tokens_map.json (0.0 MB)
+   ✅ tokenizer.json (33.0 MB)
+   📄 tokenizer.model (4.1 MB)
+   ✅ tokenizer_config.json (0.2 MB)
+   ✅ All essential model files present
+   ✅ All processor files present
+
+📤 Logging training completion to WandB...
+✅ Training summary logged to WandB
+Loaded 4453 samples for validation
+Final validation using 4453 total validation samples
+Running final validation on 50 samples
+
+Validation Results (50 samples):
+============================================================
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 1:
+Ground Truth: There are many roads and neatly arranged houses and trees and many vehicles in densely populated areas .
+Generated:    There are many roads and densely arranged houses of different sizes and shapes in the mobile home park . There are several cars on the road . A few trees are among these houses .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 2:
+Ground Truth: Chaparral is evenly distributed on the sand .
+Generated:    There are some dry bushes make up the chaparral on the desert .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 3:
+Ground Truth: green grass on both sides of the runway .
+Generated:    several planes are in an airport with a large piece of meadow .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 4:
+Ground Truth: There are many green trees and buildings around the railway station .
+Generated:    There are many buildings of different shapes and sizes beside the railway station .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 5:
+Ground Truth: There are sea ice of different sizes .
+Generated:    There are many ice on the deep blue sea .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 6:
+Ground Truth: there are green stripes in the yellow ground .
+Generated:    There are some crisscross marks in this desert .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 7:
+Ground Truth: Four trees are near the basketball court .
+Generated:    There are two basketball courts on the open place next to a piece of grass .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 8:
+Ground Truth: Beside the lake is green land .
+Generated:    The lake lies in fields and the water is dark blue . The land around the lake is uneven and there are many small islands on the shore .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 9:
+Ground Truth: There are many green trees on the wetland .
+Generated:    There is a large area of ​​dense green vegetation on the river in a wetland .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 10:
+Ground Truth: here is a square pond near a road .
+Generated:    a rectangular pond is surrounded by a gray ring and the land around it .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 11:
+Ground Truth: the waves crash up on the beach .
+Generated:    The beach is made up of light green seawater and a yellow coast . There are many waves of water breaking on the shore .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 12:
+Ground Truth: The chaparral is consist of many green bushes on the desert .
+Generated:    There are hundreds of trees in this desert .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 13:
+Ground Truth: The snow on the snowy mountains is distributed at the junction of brown and green mountains .
+Generated:    The snow berg is consist of green plants,Bare land and white snow .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 14:
+Ground Truth: the large land is a vast desert .
+Generated:    several irregular bare lands are in a piece of yellow desert .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 15:
+Ground Truth: There are green meadows beside the railway .
+Generated:    There are many trees beside the railway .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 16:
+Ground Truth: the orange desert is covering the bhurland .
+Generated:    A desert covered with sand and some bare land .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 17:
+Ground Truth: Lots of dense rectangular farmlands of different colors are arranged in neat rows .
+Generated:    There are many green rectangular farmlands and some yellow ones . There is a road between the farmlands . Some buildings are next to the farmland .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 18:
+Ground Truth: There are rows of mobile homes on each side of the path .
+Generated:    There are many buildings of different shapes and sizes in the mobile home parks .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 19:
+Ground Truth: Two straight freeways parrallel forward .
+Generated:    There are two straight freeways with some cars on the roads . There is a parking lot and some bare land beside the freeway .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 20:
+Ground Truth: One piece of thick white cloud over many urban buildings .
+Generated:    The cumulus clouds are located above the city and some ups and downs are on the ground .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 21:
+Ground Truth: There are much snow and green land on the snowberg .
+Generated:    The snowberg is covered with glaciers and the color of the mountain is green . There are some rivers on the mountain .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 22:
+Ground Truth: Some plants and people on the beach .
+Generated:    The beach is composed of light green seawater and a yellow coast with some parasols . There are many people on the beach .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 23:
+Ground Truth: The track and field is surrounded by vegetation and there is a road distance from the residential area .
+Generated:    There are many buildings next to the ground track field .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 24:
+Ground Truth: The snowberg is covered with snow and ice in the top and the color of the mountain is brown .
+Generated:    The snowberg is partly covered with glaciers and the color of the mountain is brown .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 25:
+Ground Truth: two side roads overpass the long straight highway flyover above the road below .
+Generated:    many green trees and several buildings are near a viaduct .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 26:
+Ground Truth: A few green and tan mixed circular farmland with full, Semi, And large semicircles .
+Generated:    There are several circular farmlands of the same size among some rectangular farmlands .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 27:
+Ground Truth: The forest is on the bare land .
+Generated:    There are many sparse green trees in the forest .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 28:
+Ground Truth: Many yachts are neatly arranged on the sea side of the harbor .
+Generated:    There are many yachts neatly arranged on the sea side of the harbor, And there is a parking lot nearby .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 29:
+Ground Truth: There are bare land and green land around the lake .
+Generated:    There are many lakes of different shapes and sizes .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 30:
+Ground Truth: There are many trees around the lake .
+Generated:    There are many green farmlands around the lake .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 31:
+Ground Truth: a gully separates the meadow which has few grass .
+Generated:    A green and grey meadow with some grass . A path goes through the meadow . Some trees are next to the meadow  There is a road beside the meadow.
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 32:
+Ground Truth: There is a baseball diamond in the wasteland surrounded by the roads  and forests .
+Generated:    There is a baseball diamond in the grass surrounded by the houses and forests .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 33:
+Ground Truth: The green plants are on the terrace .
+Generated:    There are many brown rectangular farmlands and green ones . There is a road in the middle of farms . A house with a black roof is also on the farmland . Many trees are planted around the farmland and there is a river beside the farmland.
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 34:
+Ground Truth: A commercial area with some buildings of different heights is surrounded by some roads .
+Generated:    A commercial area has lots of buildings and a high-rise building is in the middle of the commercial area . There are many cars on the road around the commercial areas . A parking lot with some cars is also next to the commercial region .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 35:
+Ground Truth: The snow berg is consist of green plants,Bare land and white snow .
+Generated:    The snowberg is partly covered with glaciers and the color of the mountain is brown .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 36:
+Ground Truth: A large patch of brown terraces .
+Generated:    There are many brown terraces of different sizes .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 37:
+Ground Truth: An airport with a runway on the lawn and dense residential areas around the airport .
+Generated:    An airport with a runway and many buildings is surrounded by a residential area . A green farmland is next to the airport .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 38:
+Ground Truth: Some houses arranged neatly and some cars parked beside them .
+Generated:    There are some white buildings with parking lots and some trees beside .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 39:
+Ground Truth: many overpasses have been built in this area .
+Generated:    many bare land and some green trees are near a viaduct.
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 40:
+Ground Truth: A commercial area has lots of buildings of different heights and shapes and a grove of trees is also in the commercial area .
+Generated:    There are many dense tall buildings and several roads and many trees in a business district .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 41:
+Ground Truth: Oval stadium surrounded by residential area .
+Generated:    There are many buildings of different shapes and sizes next to the stadium .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 42:
+Ground Truth: next to the road is a large industrial area .
+Generated:    many buildings and green trees are in an industrial area .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 43:
+Ground Truth: the turbid river is across the grassland with shrubs .
+Generated:    many green trees are in two sides of a curved river .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 44:
+Ground Truth: The irregular green island is surrounded by blue waters with mountains with green vegetation .
+Generated:    The island with dense vegetation is surrounded by light blue waters .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 45:
+Ground Truth: there is a playground near the building .
+Generated:    a playground with a football field in it is surrounded by some buildings and trees .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 46:
+Ground Truth: Many baseball diamonds are surrounded by many buildings and trees, Each four of them are field in a circle .
+Generated:    There are two rows of baseball diamonds in the grass .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 47:
+Ground Truth: Huge waves beat the rocks and plants on the bank .
+Generated:    The beach is composed of deep green seawater and a yellow coast with sparse green plants . The waves are white-washed on the shore, And there are many rocks around the beach .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 48:
+Ground Truth: six storage tanks are linked at the top of cone roofs near a railway and some roads .
+Generated:    several storage tanks are near a road and several green trees . one of the storage tanks has a white roof . there is a parking lot with cars beside the storage tank .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 49:
+Ground Truth: There are sea ice of different sizes .
+Generated:    There are many ice on the dark blue sea .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Both `max_new_tokens` (=50) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Validation Sample 50:
+Ground Truth: There are some red buildings near the railway station .
+Generated:    There are many cars on the road near the building .
+   Good generation length and content
+--------------------------------------------------------------------------------
+Successfully logged final validation metrics to WandB
+Successfully logged validation summary table to WandB
+
+Validation completed!
+Good: 50/50
+Short: 0/50
+Refusing: 0/50
+Avg Length: 88.8
+============================================================

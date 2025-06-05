@@ -105,37 +105,43 @@ class BestModelCallback(TrainerCallback):
 
             if current_loss < self.best_loss:
                 self.best_loss = current_loss
-                print(f"\n[BEST] New best model! Loss: {current_loss:.4f} (Step: {state.global_step})")
+                print(f"\n🏆 New best model! Loss: {current_loss:.4f} (Step: {state.global_step})")
 
                 try:
-                    # Save LoRA adapter for TSN-wrapped models
+                    # Debug model structure
+                    debug_model_structure(model, "Training Model")
+
+                    # For TSN-wrapped LoRA models, we need to save the LoRA adapter
                     model_to_save = model
 
-                    # Handle TSN wrapper
+                    # Handle TSN wrapper - correct attribute name is 'paligemma'
                     if hasattr(model, 'paligemma'):
                         model_to_save = model.paligemma
-                        print("[CONFIG] Detected TSN wrapper, extracting PaliGemma model")
+                        print("🔧 Detected TSN wrapper, extracting PaliGemma model")
+                        debug_model_structure(model_to_save, "Extracted PaliGemma Model")
                     elif hasattr(model, 'module') and hasattr(model.module, 'paligemma'):
                         model_to_save = model.module.paligemma
-                        print("[CONFIG] Detected TSN wrapper in module, extracting PaliGemma model")
+                        print("🔧 Detected TSN wrapper in module, extracting PaliGemma model")
+                        debug_model_structure(model_to_save, "Extracted PaliGemma Model")
                     else:
-                        print("[WARNING] No TSN wrapper detected, using model directly")
+                        print("⚠️  No TSN wrapper detected, using model directly")
 
-                    # Save model and processor
-                    print(f"[SAVING] Saving model to: {self.best_model_dir}")
+                    # Save the LoRA model (this includes adapter_config.json)
+                    print(f"💾 Saving model to: {self.best_model_dir}")
                     model_to_save.save_pretrained(self.best_model_dir, safe_serialization=False)
-                    print(f"[SUCCESS] Best model saved to: {self.best_model_dir}")
+                    print(f"✅ Best model saved to: {self.best_model_dir}")
 
+                    # Save processor
                     self.processor.save_pretrained(self.best_model_dir)
-                    print(f"[SUCCESS] Processor saved to: {self.best_model_dir}")
+                    print(f"✅ Processor saved to: {self.best_model_dir}")
 
                     # Verify essential files
                     essential_files = ["adapter_config.json", "adapter_model.bin"]
                     for file in essential_files:
                         if os.path.exists(os.path.join(self.best_model_dir, file)):
-                            print(f"[SUCCESS] {file} saved successfully")
+                            print(f"✅ {file} saved successfully")
                         else:
-                            print(f"[ERROR] Missing: {file}")
+                            print(f"❌ Missing: {file}")
 
                     if self.use_wandb:
                         import wandb
@@ -147,10 +153,10 @@ class BestModelCallback(TrainerCallback):
                                     "best_model/saved": True
                                 }, step=state.global_step)
                             except Exception as e:
-                                print(f"[ERROR] WandB logging error: {e}")
+                                print(f"❌ WandB logging error: {e}")
 
                 except Exception as e:
-                    print(f"[ERROR] Failed to save best model: {e}")
+                    print(f"❌ Failed to save best model: {e}")
                     import traceback
                     traceback.print_exc()
 
@@ -327,9 +333,20 @@ def collate_fn(processor, device, use_quantization=False):
     return _collate_fn
 
 def load_config(config_path):
-    """Load configuration from YAML file"""
     with open(config_path, 'r') as f:
-        return yaml.safe_load(f)
+        config = yaml.safe_load(f)
+    return config
+
+def debug_model_structure(model, name="Model"):
+    print(f"\n🔍 DEBUG: {name} Structure")
+    print(f"Type: {type(model)}")
+    print(f"Has 'paligemma' attr: {hasattr(model, 'paligemma')}")
+    print(f"Has 'module' attr: {hasattr(model, 'module')}")
+    if hasattr(model, 'module'):
+        print(f"Module has 'paligemma' attr: {hasattr(model.module, 'paligemma')}")
+    if hasattr(model, 'paligemma'):
+        print(f"PaliGemma type: {type(model.paligemma)}")
+    print("Attributes:", [attr for attr in dir(model) if not attr.startswith('_')][:10])
 
 def train(config_path="config/config.yaml"):
     config = load_config(config_path)
@@ -383,11 +400,11 @@ def train(config_path="config/config.yaml"):
 
     processor = PaliGemmaProcessor.from_pretrained(PALIGEMMA_MODEL_ID)
 
-    # Configure quantization if enabled
+
     quantization_config = config.get('quantization', {})
     use_quantization = quantization_config.get('enable_quantization', False)
 
-    # Load model with or without quantization
+
     if use_quantization:
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
@@ -407,7 +424,7 @@ def train(config_path="config/config.yaml"):
             torch_dtype=torch.bfloat16
         )
 
-    # Apply LoRA configuration
+
     lora_config = LoraConfig(
         r=LORA_R,
         target_modules=LORA_TARGET_MODULES,
@@ -417,7 +434,7 @@ def train(config_path="config/config.yaml"):
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
-    # Integrate TSN module
+
     print("\nIntegrating TSN for enhanced vision-language performance...")
     model = create_tsn_paligemma_model(model, config)
     print("TSN-PaliGemma model created successfully!")
@@ -433,7 +450,7 @@ def train(config_path="config/config.yaml"):
         max_samples=MAX_TRAIN_SAMPLES if MAX_TRAIN_SAMPLES > 0 else None
     )
 
-    # Load validation dataset if available
+
     val_csv = config['data']['val_csv']
     val_dataset = None
     if os.path.exists(val_csv):
@@ -444,6 +461,7 @@ def train(config_path="config/config.yaml"):
             max_samples=MAX_VAL_SAMPLES if MAX_VAL_SAMPLES > 0 else None
         )
         print(f"Loaded validation dataset with {len(val_dataset)} samples")
+
 
     args = TrainingArguments(
         num_train_epochs=NUM_EPOCHS,
@@ -476,6 +494,7 @@ def train(config_path="config/config.yaml"):
         run_name=WANDB_RUN_NAME,
     )
 
+
     callbacks = []
 
     # Add best model callback
@@ -503,7 +522,7 @@ def train(config_path="config/config.yaml"):
     train_result = trainer.train()
 
     print("\n" + "="*60)
-    print("SAVING FINAL MODEL")
+    print("💾 SAVING FINAL MODEL")
     print("="*60)
 
     final_model_dir = os.path.join(OUTPUT_DIR, "final_model")
@@ -513,16 +532,16 @@ def train(config_path="config/config.yaml"):
     best_model_exists = os.path.exists(best_model_dir) and len(os.listdir(best_model_dir)) > 0
 
     if best_model_exists:
-        print("[SUCCESS] Best model found, copying to final model directory...")
+        print("✅ Best model found, copying to final model directory...")
         try:
             import shutil
             if os.path.exists(final_model_dir):
                 shutil.rmtree(final_model_dir)
             shutil.copytree(best_model_dir, final_model_dir)
-            print(f"[SUCCESS] Best model copied to: {final_model_dir}")
+            print(f"✅ Best model copied to: {final_model_dir}")
         except Exception as e:
-            print(f"[ERROR] Failed to copy best model: {e}")
-            print("[LOADING] Saving current model as fallback...")
+            print(f"❌ Failed to copy best model: {e}")
+            print("🔄 Saving current model as fallback...")
             try:
                 os.makedirs(final_model_dir, exist_ok=True)
 
@@ -530,18 +549,18 @@ def train(config_path="config/config.yaml"):
                 model_to_save = model
                 if hasattr(model, 'paligemma'):
                     model_to_save = model.paligemma
-                    print("[CONFIG] Detected TSN wrapper, extracting PaliGemma model")
+                    print("🔧 Detected TSN wrapper, extracting PaliGemma model")
                 elif hasattr(model, 'module') and hasattr(model.module, 'paligemma'):
                     model_to_save = model.module.paligemma
-                    print("[CONFIG] Detected TSN wrapper in module, extracting PaliGemma model")
+                    print("🔧 Detected TSN wrapper in module, extracting PaliGemma model")
 
                 model_to_save.save_pretrained(final_model_dir, safe_serialization=False)
                 processor.save_pretrained(final_model_dir)
-                print(f"[SUCCESS] Fallback model saved to: {final_model_dir}")
+                print(f"✅ Fallback model saved to: {final_model_dir}")
             except Exception as e2:
-                print(f"[ERROR] Fallback save failed: {e2}")
+                print(f"❌ Fallback save failed: {e2}")
     else:
-        print("[WARNING]  No best model found, saving current model...")
+        print("⚠️  No best model found, saving current model...")
         try:
             os.makedirs(final_model_dir, exist_ok=True)
             os.makedirs(best_model_dir, exist_ok=True)
@@ -550,38 +569,38 @@ def train(config_path="config/config.yaml"):
             model_to_save = model
             if hasattr(model, 'paligemma'):
                 model_to_save = model.paligemma
-                print("[CONFIG] Detected TSN wrapper, extracting PaliGemma model")
+                print("🔧 Detected TSN wrapper, extracting PaliGemma model")
             elif hasattr(model, 'module') and hasattr(model.module, 'paligemma'):
                 model_to_save = model.module.paligemma
-                print("[CONFIG] Detected TSN wrapper in module, extracting PaliGemma model")
+                print("🔧 Detected TSN wrapper in module, extracting PaliGemma model")
 
             # Save to both directories
             model_to_save.save_pretrained(final_model_dir, safe_serialization=False)
             processor.save_pretrained(final_model_dir)
-            print(f"[SUCCESS] Final model saved to: {final_model_dir}")
+            print(f"✅ Final model saved to: {final_model_dir}")
 
             model_to_save.save_pretrained(best_model_dir, safe_serialization=False)
             processor.save_pretrained(best_model_dir)
-            print(f"[SUCCESS] Best model saved to: {best_model_dir}")
+            print(f"✅ Best model saved to: {best_model_dir}")
 
         except Exception as e:
-            print(f"[ERROR] Model save failed: {e}")
+            print(f"❌ Model save failed: {e}")
             import traceback
             traceback.print_exc()
-            print("Model weights are still available in trainer checkpoints")
+            print("💡 Model weights are still available in trainer checkpoints")
 
     # Verify saved files
     print("\n" + "="*60)
-    print("VERIFYING SAVED MODELS")
+    print("📋 VERIFYING SAVED MODELS")
     print("="*60)
 
     for model_type, model_dir in [("Final", final_model_dir), ("Best", best_model_dir)]:
         if os.path.exists(model_dir):
-            print(f"\n{model_type} model contents:")
+            print(f"\n� {model_type} model contents:")
             try:
                 files = os.listdir(model_dir)
                 if not files:
-                    print("   [ERROR] Directory is empty!")
+                    print("   ❌ Directory is empty!")
                     continue
 
                 # Check for essential files
@@ -592,7 +611,7 @@ def train(config_path="config/config.yaml"):
                     file_path = os.path.join(model_dir, file)
                     if os.path.isfile(file_path):
                         size_mb = os.path.getsize(file_path) / (1024 * 1024)
-                        status = "[SUCCESS]" if file in essential_files + processor_files else "FILE"
+                        status = "✅" if file in essential_files + processor_files else "📄"
                         print(f"   {status} {file} ({size_mb:.1f} MB)")
 
                 # Check if all essential files are present
@@ -600,24 +619,24 @@ def train(config_path="config/config.yaml"):
                 missing_processor = [f for f in processor_files if f not in files]
 
                 if missing_essential:
-                    print(f"   [ERROR] Missing essential files: {missing_essential}")
+                    print(f"   ❌ Missing essential files: {missing_essential}")
                 else:
-                    print(f"   [SUCCESS] All essential model files present")
+                    print(f"   ✅ All essential model files present")
 
                 if missing_processor:
-                    print(f"   [WARNING]  Missing processor files: {missing_processor}")
+                    print(f"   ⚠️  Missing processor files: {missing_processor}")
                 else:
-                    print(f"   [SUCCESS] All processor files present")
+                    print(f"   ✅ All processor files present")
 
             except Exception as e:
-                print(f"   [ERROR] Could not list files: {e}")
+                print(f"   ❌ Could not list files: {e}")
         else:
-            print(f"\n[ERROR] {model_type} model directory does not exist: {model_dir}")
+            print(f"\n❌ {model_type} model directory does not exist: {model_dir}")
 
     # Log training completion to WandB
     if USE_WANDB and wandb.run is not None:
         try:
-            print("\nLogging training completion to WandB...")
+            print("\n📤 Logging training completion to WandB...")
             training_summary = {
                 "training/final_loss": float(train_result.training_loss) if train_result.training_loss is not None else 0.0,
                 "training/total_steps": int(train_result.global_step) if train_result.global_step is not None else 0,
@@ -625,9 +644,10 @@ def train(config_path="config/config.yaml"):
                 "training/completed": True
             }
             wandb.log(training_summary)
-            print("[SUCCESS] Training summary logged to WandB")
+            print("✅ Training summary logged to WandB")
         except Exception as e:
-            print(f"[ERROR] WandB logging error: {e}")
+            print(f"❌ WandB logging error: {e}")
+
 
     validate_and_sample(model, processor, config, device)
 
@@ -655,6 +675,7 @@ def validate_and_sample(model, processor, config, device):
     total_samples = min(50, max(10, len(val_dataset) // 10))
     print(f"Running final validation on {total_samples} samples")
 
+
     validation_metrics = {
         "validation/total_samples": total_samples,
         "validation/good_generations": 0,
@@ -674,13 +695,16 @@ def validate_and_sample(model, processor, config, device):
             image = sample['image']
             ground_truth = sample['caption']
 
+
             try:
+
                 inputs = processor(
                     images=image,
                     text="<image>",
                     return_tensors="pt",
                     padding=False
                 ).to(device)
+
 
                 with torch.amp.autocast('cuda', dtype=torch.bfloat16):
                     outputs = model.generate(
@@ -694,6 +718,7 @@ def validate_and_sample(model, processor, config, device):
                         eos_token_id=processor.tokenizer.eos_token_id
                     )
 
+
                 generated_text = processor.batch_decode(outputs, skip_special_tokens=True)[0]
 
                 generated_caption = generated_text.replace("<image>", "").strip()
@@ -701,6 +726,7 @@ def validate_and_sample(model, processor, config, device):
                 print(f"\nValidation Sample {i+1}:")
                 print(f"Ground Truth: {ground_truth}")
                 print(f"Generated:    {generated_caption}")
+
 
                 generation_lengths.append(len(generated_caption))
 
@@ -719,8 +745,10 @@ def validate_and_sample(model, processor, config, device):
                 print(f"Error {i+1}: {e}")
                 continue
 
+
     if generation_lengths:
         validation_metrics["validation/avg_generation_length"] = sum(generation_lengths) / len(generation_lengths)
+
 
     USE_WANDB = config['training'].get('use_wandb', True)
     if USE_WANDB:
